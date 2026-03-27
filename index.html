@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=7">
-<link rel="icon" href="IMG_6157.png?v=7" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=7">
+<link rel="manifest" href="manifest.json?v=8">
+<link rel="icon" href="IMG_6157.png?v=8" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=8">
 
 <style>
 :root{
@@ -134,7 +134,7 @@ button{
 }
 
 #output .value{
-    font-size:16px; /* 少し小さく */
+    font-size:14px; /* 少し小さくして見切れ防止 */
     color:var(--main);
 }
 
@@ -186,20 +186,6 @@ button{
     grid-template-columns:1fr 1fr;
     gap:6px;
 }
-
-/* 履歴カード文字色を生成時モードに連動 */
-.card.cyberpunk .label{ color:#FF00FF; }
-.card.cyberpunk .value{ color:#00FFFF; }
-
-.card.apocalypse .label{ color:#FF4500; }
-.card.apocalypse .value{ color:#FFD700; }
-
-.card.synthwave .label{ color:#00FFFF; }
-.card.synthwave .value{ color:#FF00FF; }
-
-.card.dreamcore .label{ color:#FF99FF; }
-.card.dreamcore .value{ color:#99FFCC; }
-
 </style>
 </head>
 
@@ -245,6 +231,13 @@ let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
 let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated=null;
 let showingFavorites=false;
+
+const modeColors = {
+    cyberpunk: {label:"#FF00FF", value:"#00FFFF"},
+    apocalypse: {label:"#FF4500", value:"#FFD700"},
+    synthwave: {label:"#00FFFF", value:"#FF00FF"},
+    dreamcore: {label:"#FF99FF", value:"#99FFCC"}
+};
 
 function save(){
     localStorage.setItem("historyData",JSON.stringify(historyData));
@@ -305,7 +298,7 @@ function renderList(data){
     data.forEach((item,i)=>{
         const isFav=favoritesData.some(f=>isSame(f,item));
         html+=`
-        <div class="card ${item.mode}">
+        <div class="card">
         <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
         ${isFav?"★":"☆"}
         </div>
@@ -326,6 +319,14 @@ function renderList(data){
         </div>
         <div class="cardTime">${item.time}</div>
         </div>`;
+
+        // JS補正で文字色を生成時モードに連動
+        setTimeout(()=>{
+            const card = document.getElementsByClassName("card")[i];
+            const colors = modeColors[item.mode] || {label:"#fff", value:"#fff"};
+            card.querySelectorAll(".label").forEach(el=>el.style.color=colors.label);
+            card.querySelectorAll(".value").forEach(el=>el.style.color=colors.value);
+        },0);
     });
     historyList.innerHTML=html;
 }
@@ -370,6 +371,5 @@ favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
 
 </script>
-
 </body>
 </html>
