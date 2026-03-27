@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>City Generator</title>
+<title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=3">
-<link rel="icon" href="IMG_6157.png?v=3" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=3">
+<link rel="manifest" href="manifest.json?v=4">
+<link rel="icon" href="IMG_6157.png?v=4" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=4">
 
 <style>
 /* ===== モードカラー ===== */
@@ -163,6 +163,7 @@ button{
     padding:10px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
+    font-size:13px; /* フォントサイズを小さく */
 }
 
 .cardFav{
@@ -176,7 +177,7 @@ button{
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:8px;
+    gap:6px;
 }
 
 /* ★履歴カードの文字色をモードに合わせて修正 */
@@ -197,7 +198,7 @@ button{
 <body class="cyberpunk">
 
 <div id="mainScreen">
-<div class="title">City Generator</div>
+<div class="title">Re：City Generator</div>
 
 <div class="controls">
 <button id="generateBtn">Generate</button>
@@ -306,6 +307,9 @@ function renderList(data){
         <div class="label">建築</div><div class="value">${item.建築}</div>
         <div class="label">環境</div><div class="value">${item.環境}</div>
         <div class="label">社会</div><div class="value">${item.社会}</div>
+        <div class="label">雰囲気</div><div class="value">${item.雰囲気}</div>
+        <div class="label">地区</div><div class="value">${item.地区}</div>
+        <div class="label">職業</div><div class="value">${item.職業}</div>
         </div>
         <div>
         <div class="label">施設</div><div class="value">${item.施設}</div>
