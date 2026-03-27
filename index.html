@@ -6,10 +6,9 @@
 
 <title>City Generator</title>
 
-<!-- Manifest -->
-<link rel="manifest" href="manifest.json?v=2">
-<link rel="icon" href="IMG_6157.png?v=2" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=2">
+<link rel="manifest" href="manifest.json?v=3">
+<link rel="icon" href="IMG_6157.png?v=3" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=3">
 
 <style>
 /* ===== モードカラー ===== */
@@ -180,18 +179,18 @@ button{
     gap:8px;
 }
 
-/* ★モード同期（生成画面と同じネオンカラー） */
+/* ★履歴カードの文字色をモードに合わせて修正 */
 .card.cyberpunk .label{ color:#FF00FF; }
-.card.cyberpunk div{ color:#00FFFF; }
+.card.cyberpunk .value{ color:#00FFFF; }
 
 .card.apocalypse .label{ color:#FF4500; }
-.card.apocalypse div{ color:#FFD700; }
+.card.apocalypse .value{ color:#FFD700; }
 
 .card.synthwave .label{ color:#00FFFF; }
-.card.synthwave div{ color:#FF00FF; }
+.card.synthwave .value{ color:#FF00FF; }
 
 .card.dreamcore .label{ color:#FF99FF; }
-.card.dreamcore div{ color:#99FFCC; }
+.card.dreamcore .value{ color:#99FFCC; }
 </style>
 </head>
 
@@ -203,7 +202,6 @@ button{
 <div class="controls">
 <button id="generateBtn">Generate</button>
 
-<!-- カスタムプルダウン -->
 <div class="dropdown">
     <div class="dropdown-toggle" id="modeToggle">Cyberpunk</div>
     <div class="dropdown-menu" id="modeMenu">
@@ -305,14 +303,14 @@ function renderList(data){
         <div>${item.time}</div>
         <div class="cardContent">
         <div>
-        <div class="label">建築</div><div>${item.建築}</div>
-        <div class="label">環境</div><div>${item.環境}</div>
-        <div class="label">社会</div><div>${item.社会}</div>
+        <div class="label">建築</div><div class="value">${item.建築}</div>
+        <div class="label">環境</div><div class="value">${item.環境}</div>
+        <div class="label">社会</div><div class="value">${item.社会}</div>
         </div>
         <div>
-        <div class="label">施設</div><div>${item.施設}</div>
-        <div class="label">事件</div><div>${item.事件}</div>
-        <div class="label">主要人物</div><div>${item.主要人物}</div>
+        <div class="label">施設</div><div class="value">${item.施設}</div>
+        <div class="label">事件</div><div class="value">${item.事件}</div>
+        <div class="label">主要人物</div><div class="value">${item.主要人物}</div>
         </div>
         </div>
         </div>`;
@@ -339,7 +337,7 @@ function back(){
     mainScreen.style.display="block";
 }
 
-/* ===== カスタムドロップダウン最小JS ===== */
+/* カスタムドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
