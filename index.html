@@ -74,36 +74,13 @@ select{
     gap:6px;
 }
 
-/* セレクトボックス全体 */
-select#modeSelect {
-    appearance: none;       /* システムデフォルトを消す */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: var(--bg);
-    color: var(--main);
-    border: 2px solid var(--main);
-    border-radius: 6px;
-    padding: 6px 30px 6px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    box-shadow: 0 0 8px var(--main), 0 0 20px var(--accent);
-    text-align: center;
-    cursor: pointer;
-}
-
-/* ドロップダウン矢印を自作 */
-select#modeSelect::after {
-    content: "▼";
-    position: absolute;
-    right: 10px;
-    pointer-events: none;
-}
-
-/* 選択肢のカラー */
+/* プルダウンの選択肢自体の装飾 */
 select#modeSelect option {
-    background: var(--bg);
-    color: var(--main);
-    padding: 4px;
+    background: var(--bg);       /* 背景色 */
+    color: var(--main);          /* 文字色 */
+    padding: 6px 12px;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* ===== 出力 ===== */
