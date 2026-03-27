@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=13">
-<link rel="icon" href="IMG_6157.png?v=13" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=13">
+<link rel="manifest" href="manifest.json?v=14">
+<link rel="icon" href="IMG_6157.png?v=14" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=14">
 
 <style>
 :root{
@@ -34,7 +34,7 @@ body{
 #mainScreen{ padding-top:18px; }
 
 .title{
-    font-size:32px;
+    font-size:31px;
     font-weight:900;
     margin-top:12px;
     margin-bottom:20px;
@@ -149,7 +149,7 @@ button{
 }
 
 #backBtn, #favHistoryBtn{
-    position:absolute; /* 固定表示 */
+    position:absolute;
     top:10px;
     padding:6px 12px;
     font-size:14px;
@@ -173,7 +173,7 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:34px;
+    font-size:38px; /* ⭐︎さらに大きく */
     cursor:pointer;
 }
 
@@ -356,6 +356,7 @@ function back(){
     mainScreen.style.display="block";
 }
 
+/* ドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
@@ -368,12 +369,20 @@ menu.querySelectorAll("div").forEach(el=>{
     }
 });
 
+/* イベント設定 */
 generateBtn.onclick=generate;
 historyBtn.onclick=showHistory;
 backBtn.onclick=back;
 favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
 
+/* ===== 履歴画面最上部タップでスクロールトップ ===== */
+historyScreen.addEventListener("click", e=>{
+    if(e.target.id === "historyScreen"){
+        historyScreen.scrollTop = 0;
+    }
+});
 </script>
+
 </body>
 </html>
