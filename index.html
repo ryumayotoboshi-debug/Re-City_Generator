@@ -17,14 +17,7 @@ body.apocalypse{ --main:#FAFAD2; --accent:#228B22; --bg:#1a0000; }
 body.synthwave{ --main:#FF00FF; --accent:#1E90FF; --bg:#14001a; }
 body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
 
-body{
-    margin:0;
-    background:var(--bg);
-    color:var(--main);
-    font-family:monospace;
-    overflow:hidden;
-    text-align:center;
-}
+body{ margin:0; background:var(--bg); color:var(--main); font-family:monospace; overflow:hidden; text-align:center; }
 #mainScreen{ padding-top:18px; }
 .title{ font-size:38px; font-weight:900; margin-top:12px; margin-bottom:20px; text-shadow:0 0 12px var(--main); }
 
@@ -55,12 +48,6 @@ button{ background:black; color:var(--main); border:1px solid var(--main); font-
 .cardTime{ font-size:8px; margin-bottom:4px; }
 
 .cardContent{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-
-/* 履歴カード文字色 */
-.card.cyberpunk .label{ color:#FF00FF; } .card.cyberpunk .value{ color:#00FFFF; }
-.card.apocalypse .label{ color:#FF4500; } .card.apocalypse .value{ color:#FFD700; }
-.card.synthwave .label{ color:#00FFFF; } .card.synthwave .value{ color:#FF00FF; }
-.card.dreamcore .label{ color:#FF99FF; } .card.dreamcore .value{ color:#99FFCC; }
 </style>
 </head>
 
@@ -105,6 +92,13 @@ let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
 let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated=null;
 let showingFavorites=false;
+
+const modeColors={
+  cyberpunk:{label:'#FF00FF', value:'#00FFFF'},
+  apocalypse:{label:'#FF4500', value:'#FFD700'},
+  synthwave:{label:'#00FFFF', value:'#FF00FF'},
+  dreamcore:{label:'#FF99FF', value:'#99FFCC'}
+};
 
 function save(){
     localStorage.setItem("historyData",JSON.stringify(historyData));
@@ -159,26 +153,26 @@ function toggleFavoriteMain(){
 function renderList(data){
     let html="";
     data.forEach((item,i)=>{
-        // ★カードに生成時モードクラスを必ず付与
+        const colors = modeColors[item.mode]||{label:'#fff',value:'#fff'};
         html+=`
-        <div class="card ${item.mode}">
+        <div class="card" style="border-color:${colors.value};">
             <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
                 ${favoritesData.some(f=>isSame(f,item))?"★":"☆"}
             </div>
-            <div class="cardTime">${item.time}</div>
+            <div class="cardTime" style="color:${colors.value};">${item.time}</div>
             <div class="cardContent">
                 <div>
-                    <div class="label">建築</div><div class="value">${item.建築}</div>
-                    <div class="label">環境</div><div class="value">${item.環境}</div>
-                    <div class="label">社会</div><div class="value">${item.社会}</div>
-                    <div class="label">雰囲気</div><div class="value">${item.雰囲気}</div>
-                    <div class="label">地区</div><div class="value">${item.地区}</div>
+                    <div class="label" style="color:${colors.label};">建築</div><div class="value" style="color:${colors.value};">${item.建築}</div>
+                    <div class="label" style="color:${colors.label};">環境</div><div class="value" style="color:${colors.value};">${item.環境}</div>
+                    <div class="label" style="color:${colors.label};">社会</div><div class="value" style="color:${colors.value};">${item.社会}</div>
+                    <div class="label" style="color:${colors.label};">雰囲気</div><div class="value" style="color:${colors.value};">${item.雰囲気}</div>
+                    <div class="label" style="color:${colors.label};">地区</div><div class="value" style="color:${colors.value};">${item.地区}</div>
                 </div>
                 <div>
-                    <div class="label">施設</div><div class="value">${item.施設}</div>
-                    <div class="label">職業</div><div class="value">${item.職業}</div>
-                    <div class="label">事件</div><div class="value">${item.事件}</div>
-                    <div class="label">主要人物</div><div class="value">${item.主要人物}</div>
+                    <div class="label" style="color:${colors.label};">施設</div><div class="value" style="color:${colors.value};">${item.施設}</div>
+                    <div class="label" style="color:${colors.label};">職業</div><div class="value" style="color:${colors.value};">${item.職業}</div>
+                    <div class="label" style="color:${colors.label};">事件</div><div class="value" style="color:${colors.value};">${item.事件}</div>
+                    <div class="label" style="color:${colors.label};">主要人物</div><div class="value" style="color:${colors.value};">${item.主要人物}</div>
                 </div>
             </div>
         </div>`;
