@@ -135,7 +135,7 @@ button{
 }
 
 #output .value{
-    font-size:17px; /* もう少し大きく */
+    font-size:16px; /* 少し大きめ */
     color:var(--main);
 }
 
@@ -146,15 +146,6 @@ button{
     overflow-y:auto;
     display:none;
     position:relative;
-}
-
-#historyTopTap{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:50px;
-    z-index:1000;
 }
 
 #backBtn, #favHistoryBtn{
@@ -179,14 +170,14 @@ button{
 
 .cardFav{
     position:absolute;
-    top:2px; /* 少し上に */
+    top:6px;
     right:8px;
-    font-size:40px; /* サイズはそのまま */
+    font-size:40px; /* ⭐︎さらに大きく */
     cursor:pointer;
 }
 
 .cardTime{
-    font-size:12px;
+    font-size:12px; /* 少し大きく */
     position:absolute;
     right:6px;
     bottom:4px;
@@ -246,8 +237,6 @@ button{
 </div>
 
 <div id="historyScreen">
-<div id="historyTopTap"></div> <!-- 上端タップ用 -->
-
 <button id="backBtn">戻る</button>
 <button id="favHistoryBtn">お気に入り</button>
 <h2 id="historyTitle">History</h2>
@@ -384,9 +373,11 @@ backBtn.onclick=back;
 favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
 
-/* 履歴画面上端タップでスクロール最上部に戻す */
-document.getElementById("historyTopTap").addEventListener("click",()=>{
-    historyScreen.scrollTop=0;
+/* 履歴画面タップで最上部にスクロール */
+historyScreen.addEventListener("click",(e)=>{
+    if(e.clientY <= 50){ // 画面上部50px以内なら
+        historyScreen.scrollTop=0;
+    }
 });
 
 </script>
