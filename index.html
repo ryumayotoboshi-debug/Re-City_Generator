@@ -6,232 +6,294 @@
 <title>City Generator</title>
 
 <style>
+
+/* ===== モードカラー ===== */
+:root{
+    --main:#00ffcc;
+    --accent:#ff2bd6;
+    --bg:black;
+}
+
+body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
+body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; }
+body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; }
+body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
+
+/* ===== 基本 ===== */
 body{
     margin:0;
-    font-family:sans-serif;
-    background:#0a0a0a;
-    color:white;
+    background:var(--bg);
+    color:var(--main);
+    font-family:monospace;
+    overflow:hidden;
     text-align:center;
 }
 
 /* タイトル */
-h1{
-    font-size:2.5em;
-    margin-top:40px;
-    margin-bottom:30px;
+.title{
+    font-size:30px;
+    margin-top:24px;
+    margin-bottom:16px;
+    text-shadow:0 0 10px var(--main);
 }
 
-/* ボタンエリア */
-.top-buttons{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:30px;
+/* 画面 */
+.screen{ display:none; }
+.active{ display:block; }
+
+/* ===== コントロール ===== */
+.controls{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 34px 34px;
+    gap:6px;
+    padding:6px;
 }
 
-button{
-    padding:10px 16px;
-    border:none;
-    border-radius:8px;
-    background:#222;
-    color:white;
-    cursor:pointer;
+button, select{
+    background:black;
+    color:var(--main);
+    border:1px solid var(--main);
+    font-size:12px;
+    text-align:center;
+    text-align-last:center;
+    box-shadow:0 0 5px var(--main);
 }
 
-/* Generateボタン少し低く */
-.generate{
-    height:40px;
+#generateBtn{
+    grid-row:1 / span 2;
 }
 
-/* 見出し */
-.section-title{
-    color:#ff4fd8;
-    font-size:1em;
-    margin-top:60px; /* ←ボタンとの余白拡大 */
-    margin-bottom:6px;
+#modeSelect{
+    width:100%;
 }
 
-/* 出力内容 */
-.content{
-    font-size:1.3em;
-    margin-bottom:20px;
+/* 右下 */
+.bottomRight{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
 }
 
-/* 履歴画面 */
+/* 出力 */
+#output{
+    margin-top:6px;
+    font-size:16px;
+    line-height:1.6;
+}
+
+.block{ margin-bottom:6px; }
+
+/* ★余白拡張（ここ変更） */
+.block:first-child .label{
+    padding-top:26px;
+}
+
+.label{
+    color:var(--accent);
+    font-size:12px;
+    text-shadow:0 0 6px var(--accent);
+    margin-bottom:1px;
+}
+
+.value{
+    font-size:14px;
+}
+
+/* ===== 履歴 ===== */
 #historyScreen{
-    display:none;
-    padding:20px;
+    padding:10px;
 }
 
-.history-card{
-    padding:20px;
-    border-radius:10px;
-    margin-bottom:20px;
+/* 戻る */
+#backBtn{
+    position:absolute;
+    top:10px;
+    left:10px;
 }
 
-/* 2列構成 */
-.card-grid{
-    display:flex;
-    gap:20px;
+/* お気に入り */
+#favHistoryBtn{
+    position:absolute;
+    top:10px;
+    right:10px;
 }
 
-.card-col{
-    flex:1;
+/* カード */
+.card{
+    border:1px solid;
+    margin-bottom:12px;
+    padding:10px;
+    font-size:13px;
     text-align:left;
 }
 
-/* 履歴内テキスト */
-.card-title{
-    margin-top:20px;
-    margin-bottom:4px; /* 見出しと内容の間を縮小 */
+/* モード別 */
+.card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
+.card.apocalypse{ border-color:#ff4444; color:#ff4444; }
+.card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
+.card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
+
+/* ★履歴見出しの色を統一（ここ変更） */
+.card .label{
+    color:var(--accent);
+    text-shadow:0 0 6px var(--accent);
 }
 
-/* セクション間余白を拡大 */
-.card-col .content{
-    margin-bottom:25px;
+/* 時刻 */
+.time{
+    font-size:10px;
+    margin-bottom:6px;
+    color:#888;
+}
+
+/* 2カラム */
+.cardContent{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:8px;
+}
+
+/* 見出し余白 */
+.cardContent .label{
+    margin-bottom:0px;
+}
+
+/* ★要素間の余白を拡張（ここ変更） */
+.cardContent div{
+    margin-bottom:6px;
 }
 
 </style>
 </head>
 
-<body>
+<body class="cyberpunk">
 
-<!-- 生成画面 -->
-<div id="mainScreen">
+<div id="mainScreen" class="screen active">
 
-<h1>City Generator</h1>
+<div class="title">City Generator</div>
 
-<div class="top-buttons">
-    <button onclick="setMode('Synthwave')">Synthwave</button>
-    <button onclick="setMode('DreamCore')">DreamCore</button>
-    <button onclick="showHistory()">History</button>
-    <button onclick="toggleFavorite()">⭐︎</button>
+<div class="controls">
+    <button id="generateBtn">Generate</button>
+
+    <select id="modeSelect">
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="apocalypse">Apocalypse</option>
+        <option value="synthwave">Synthwave</option>
+        <option value="dreamcore">DreamCore</option>
+    </select>
+
+    <div class="bottomRight">
+        <button id="historyBtn">History</button>
+        <button id="favBtn">⭐</button>
+    </div>
 </div>
 
-<button class="generate" onclick="generateCity()">Generate</button>
-
-<div id="result"></div>
+<div id="output"></div>
 
 </div>
 
 <!-- 履歴画面 -->
-<div id="historyScreen">
-
-<button onclick="backToMain()">戻る</button>
-
-<div id="historyList"></div>
-
+<div id="historyScreen" class="screen">
+    <button id="backBtn">戻る</button>
+    <button id="favHistoryBtn">⭐ お気に入り</button>
+    <h2>History</h2>
+    <div id="historyList"></div>
 </div>
 
-<script>
+<script src="data.js"></script>
 
-let currentMode = "Synthwave";
+<script>
+let currentMode = "cyberpunk";
 let historyData = [];
 
-/* モード色 */
-function getModeColor(mode){
-    if(mode==="Synthwave") return "#ff4fd8";
-    if(mode==="DreamCore") return "#4fd8ff";
-    return "#fff";
+function pick(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
 }
 
-function setMode(mode){
-    currentMode = mode;
-}
+function generate(){
+    const d = data[currentMode];
 
-/* 生成 */
-function generateCity(){
-
-    const data = {
-        建築:"ネオンに包まれた高層ビル群",
-        環境:"常に夜のような薄暗い空",
-        地区:"歓楽街と工業地帯が混在",
-        施設:"巨大なデータセンター",
-        主要人物:"謎のハッカー"
+    const result = {
+        建築: pick(d.architecture),
+        環境: pick(d.environment),
+        社会: pick(d.society),
+        雰囲気: pick(d.mood),
+        地区: pick(d.district),
+        施設: pick(d.facility),
+        職業: pick(d.jobs),
+        事件: pick(d.incidents),
+        主要人物: pick(d.characters),
+        mode: currentMode,
+        time: new Date().toLocaleString()
     };
 
-    displayResult(data, currentMode);
+    historyData.unshift(result);
 
-    historyData.push({
-        data:data,
-        mode:currentMode
-    });
+    let html = "";
+    for(let key in result){
+        if(key === "time" || key === "mode") continue;
+        html += `
+        <div class="block">
+            <div class="label">${key}</div>
+            <div class="value">${result[key]}</div>
+        </div>`;
+    }
 
+    document.getElementById("output").innerHTML = html;
 }
 
-/* 表示 */
-function displayResult(data, mode){
+function changeMode(){
+    const select = document.getElementById("modeSelect");
+    currentMode = select.value;
+    document.body.className = currentMode;
+}
 
-    const color = getModeColor(mode);
+function showHistory(){
+    document.getElementById("mainScreen").classList.remove("active");
+    document.getElementById("historyScreen").classList.add("active");
 
     let html = "";
 
-    for(let key in data){
-        html += `
-        <div class="section-title" style="color:${color}">${key}</div>
-        <div class="content">${data[key]}</div>
-        `;
-    }
-
-    document.getElementById("result").innerHTML = html;
-}
-
-/* 履歴表示 */
-function showHistory(){
-
-    document.getElementById("mainScreen").style.display="none";
-    document.getElementById("historyScreen").style.display="block";
-
-    let html="";
-
     historyData.forEach(item=>{
+        html += `<div class="card ${item.mode}">
+        <div class="time">${item.time}</div>
 
-        const color = getModeColor(item.mode);
+        <div class="cardContent">
 
-        html += `
-        <div class="history-card" style="background:${color}22">
+        <div>
+        <div class="label">建築</div><div>${item.建築}</div>
+        <div class="label">環境</div><div>${item.環境}</div>
+        <div class="label">社会</div><div>${item.社会}</div>
+        <div class="label">雰囲気</div><div>${item.雰囲気}</div>
+        <div class="label">地区</div><div>${item.地区}</div>
+        </div>
 
-            <button style="float:right">⭐︎</button>
-
-            <div class="card-grid">
-
-                <div class="card-col">
-                    <div class="card-title" style="color:${color}">建築</div>
-                    <div class="content">${item.data.建築}</div>
-
-                    <div class="card-title" style="color:${color}">環境</div>
-                    <div class="content">${item.data.環境}</div>
-
-                    <div class="card-title" style="color:${color}">地区</div>
-                    <div class="content">${item.data.地区}</div>
-                </div>
-
-                <div class="card-col">
-                    <div class="card-title" style="color:${color}">施設</div>
-                    <div class="content">${item.data.施設}</div>
-
-                    <div class="card-title" style="color:${color}">主要人物</div>
-                    <div class="content">${item.data.主要人物}</div>
-                </div>
-
-            </div>
+        <div>
+        <div class="label">施設</div><div>${item.施設}</div>
+        <div class="label">職業</div><div>${item.職業}</div>
+        <div class="label">事件</div><div>${item.事件}</div>
+        <div class="label">主要人物</div><div>${item.主要人物}</div>
+        </div>
 
         </div>
-        `;
+        </div>`;
     });
 
     document.getElementById("historyList").innerHTML = html;
 }
 
-function backToMain(){
-    document.getElementById("mainScreen").style.display="block";
-    document.getElementById("historyScreen").style.display="none";
+function back(){
+    document.getElementById("historyScreen").classList.remove("active");
+    document.getElementById("mainScreen").classList.add("active");
 }
 
-/* お気に入り（仮） */
-function toggleFavorite(){
-    alert("お気に入り機能（未実装）");
-}
+generateBtn.onclick = generate;
+modeSelect.onchange = changeMode;
+historyBtn.onclick = showHistory;
+backBtn.onclick = back;
+favBtn.onclick = ()=>alert("お気に入り未実装");
+favHistoryBtn.onclick = ()=>alert("お気に入り一覧未実装");
 
 </script>
 
