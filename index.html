@@ -31,6 +31,11 @@ body{
     text-align:center;
 }
 
+/* ★全体を下に移動（ここだけ） */
+#mainScreen{
+    padding-top:40px;
+}
+
 /* タイトル */
 .title{
     font-size:30px;
@@ -40,7 +45,6 @@ body{
     text-shadow:0 0 10px var(--main);
 }
 
-/* 画面 */
 .screen{ display:none; }
 .active{ display:block; }
 
@@ -72,7 +76,7 @@ button, select{
     gap:6px;
 }
 
-/* ===== 出力 ===== */
+/* 出力 */
 #output{
     margin-top:6px;
     font-size:16px;
@@ -101,7 +105,7 @@ button, select{
 #historyScreen{
     padding:10px;
     height:100vh;
-    overflow-y:auto; /* ★スクロール */
+    overflow-y:auto;
 }
 
 #backBtn{
@@ -116,7 +120,6 @@ button, select{
     right:10px;
 }
 
-/* カード */
 .card{
     border:1px solid;
     margin-bottom:12px;
@@ -125,13 +128,11 @@ button, select{
     text-align:left;
 }
 
-/* モード別 */
 .card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
 .card.apocalypse{ border-color:#ff4444; color:#ff4444; }
 .card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
 .card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
 
-/* 見出し色同期 */
 .card.cyberpunk .label{ color:#ff2bd6; }
 .card.apocalypse .label{ color:#ffaa00; }
 .card.synthwave .label{ color:#66ccff; }
@@ -143,7 +144,6 @@ button, select{
     color:#888;
 }
 
-/* 2カラム */
 .cardContent{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -175,7 +175,7 @@ button, select{
 
     <div class="bottomRight">
         <button id="historyBtn">History</button>
-        <button id="favBtn">⭐</button>
+        <button id="favBtn">☆</button>
     </div>
 </div>
 
@@ -183,7 +183,7 @@ button, select{
 
 </div>
 
-<!-- 履歴画面 -->
+<!-- 履歴 -->
 <div id="historyScreen" class="screen">
     <button id="backBtn">戻る</button>
     <button id="favHistoryBtn">⭐ お気に入り</button>
@@ -201,6 +201,10 @@ let lastGenerated = null;
 
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function isSame(a,b){
+    return JSON.stringify(a) === JSON.stringify(b);
 }
 
 function generate(){
@@ -223,6 +227,8 @@ function generate(){
     lastGenerated = result;
     historyData.unshift(result);
 
+    document.getElementById("favBtn").innerText = "☆";
+
     let html = "";
     for(let key in result){
         if(key === "time" || key === "mode") continue;
@@ -233,7 +239,21 @@ function generate(){
         </div>`;
     }
 
-    document.getElementById("output").innerHTML = html;
+    output.innerHTML = html;
+}
+
+function toggleFavorite(){
+    if(!lastGenerated) return;
+
+    const index = favoritesData.findIndex(f=>isSame(f,lastGenerated));
+
+    if(index >= 0){
+        favoritesData.splice(index,1);
+        favBtn.innerText = "☆";
+    }else{
+        favoritesData.unshift(lastGenerated);
+        favBtn.innerText = "★";
+    }
 }
 
 function changeMode(){
@@ -289,14 +309,7 @@ generateBtn.onclick = generate;
 modeSelect.onchange = changeMode;
 historyBtn.onclick = showHistory;
 backBtn.onclick = back;
-
-favBtn.onclick = ()=>{
-    if(lastGenerated){
-        favoritesData.unshift(lastGenerated);
-        alert("お気に入りに追加しました");
-    }
-};
-
+favBtn.onclick = toggleFavorite;
 favHistoryBtn.onclick = showFavorites;
 
 </script>
