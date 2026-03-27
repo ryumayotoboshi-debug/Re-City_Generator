@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=4">
-<link rel="icon" href="IMG_6157.png?v=4" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=4">
+<link rel="manifest" href="manifest.json?v=5">
+<link rel="icon" href="IMG_6157.png?v=5" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=5">
 
 <style>
 /* ===== モードカラー ===== */
@@ -160,17 +160,17 @@ button{
     position:relative;
     border:1px solid;
     margin-bottom:12px;
-    padding:10px;
+    padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
-    font-size:13px; /* フォントサイズを小さく */
+    font-size:11px; /* 全体フォントサイズを小さく */
 }
 
 .cardFav{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:26px;
+    font-size:24px;
     cursor:pointer;
 }
 
@@ -180,7 +180,12 @@ button{
     gap:6px;
 }
 
-/* ★履歴カードの文字色をモードに合わせて修正 */
+.cardTime{
+    font-size:10px; /* 時刻フォントを小さく */
+    margin-bottom:4px;
+}
+
+/* ★履歴カード文字色を生成時モードに連動 */
 .card.cyberpunk .label{ color:#FF00FF; }
 .card.cyberpunk .value{ color:#00FFFF; }
 
@@ -301,7 +306,7 @@ function renderList(data){
         <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
         ${isFav?"★":"☆"}
         </div>
-        <div>${item.time}</div>
+        <div class="cardTime">${item.time}</div>
         <div class="cardContent">
         <div>
         <div class="label">建築</div><div class="value">${item.建築}</div>
@@ -309,10 +314,10 @@ function renderList(data){
         <div class="label">社会</div><div class="value">${item.社会}</div>
         <div class="label">雰囲気</div><div class="value">${item.雰囲気}</div>
         <div class="label">地区</div><div class="value">${item.地区}</div>
-        <div class="label">職業</div><div class="value">${item.職業}</div>
         </div>
         <div>
         <div class="label">施設</div><div class="value">${item.施設}</div>
+        <div class="label">職業</div><div class="value">${item.職業}</div>
         <div class="label">事件</div><div class="value">${item.事件}</div>
         <div class="label">主要人物</div><div class="value">${item.主要人物}</div>
         </div>
