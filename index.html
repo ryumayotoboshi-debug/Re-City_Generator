@@ -149,7 +149,7 @@ button{
 }
 
 #backBtn, #favHistoryBtn{
-    position:absolute;
+    position:absolute; /* 固定表示 */
     top:10px;
     padding:6px 12px;
     font-size:14px;
@@ -166,7 +166,6 @@ button{
     padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
-    font-size:10px;
 }
 
 .cardFav{
@@ -195,17 +194,17 @@ button{
 }
 
 /* 履歴カード文字色をモードごとに分離 & フォントサイズ調整 */
-.card.cyberpunk .label{ color:#FF00FF; font-size:14px; }
-.card.cyberpunk .value{ color:#00FFFF; font-size:14px; }
+.card.cyberpunk .label{ color:#FF00FF; font-size:16px; }
+.card.cyberpunk .value{ color:#00FFFF; font-size:15px; }
 
-.card.apocalypse .label{ color:#228B22; font-size:14px; }
-.card.apocalypse .value{ color:#FAFAD2; font-size:14px; }
+.card.apocalypse .label{ color:#228B22; font-size:16px; }
+.card.apocalypse .value{ color:#FAFAD2; font-size:15px; }
 
-.card.synthwave .label{ color:#1E90FF; font-size:14px; }
-.card.synthwave .value{ color:#FF00FF; font-size:14px; }
+.card.synthwave .label{ color:#1E90FF; font-size:16px; }
+.card.synthwave .value{ color:#FF00FF; font-size:15px; }
 
-.card.dreamcore .label{ color:#ff99ff; font-size:14px; }
-.card.dreamcore .value{ color:#99ffcc; font-size:14px; }
+.card.dreamcore .label{ color:#ff99ff; font-size:16px; }
+.card.dreamcore .value{ color:#99ffcc; font-size:15px; }
 
 </style>
 </head>
@@ -356,7 +355,6 @@ function back(){
     mainScreen.style.display="block";
 }
 
-/* ドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
@@ -369,20 +367,20 @@ menu.querySelectorAll("div").forEach(el=>{
     }
 });
 
-/* イベント設定 */
 generateBtn.onclick=generate;
 historyBtn.onclick=showHistory;
 backBtn.onclick=back;
 favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
 
-/* ===== 履歴画面最上部タップでスクロールトップ ===== */
-historyScreen.addEventListener("click", e=>{
-    if(e.target.id === "historyScreen"){
-        historyScreen.scrollTop = 0;
+/* 履歴画面タップで最上部にスクロール */
+historyScreen.addEventListener("click",(e)=>{
+    // 画面上部をタップした場合のみ
+    if(e.target===historyScreen){
+        historyScreen.scrollTop=0;
     }
 });
-</script>
 
+</script>
 </body>
 </html>
