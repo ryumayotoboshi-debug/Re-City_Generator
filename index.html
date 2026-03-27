@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=6">
-<link rel="icon" href="IMG_6157.png?v=6" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=6">
+<link rel="manifest" href="manifest.json?v=7">
+<link rel="icon" href="IMG_6157.png?v=7" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=7">
 
 <style>
 /* ===== モードカラー ===== */
@@ -35,7 +35,7 @@ body{
 #mainScreen{ padding-top:18px; }
 
 .title{
-    font-size:32px; /* 少し小さく */
+    font-size:32px;
     font-weight:900;
     margin-top:12px;
     margin-bottom:20px;
@@ -134,7 +134,7 @@ button{
 }
 
 .value{
-    font-size:14px; /* 少し小さく */
+    font-size:16px; /* 少し大きく */
     color:var(--main);
 }
 
@@ -170,12 +170,12 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:22px;
+    font-size:26px; /* 少し大きく */
     cursor:pointer;
 }
 
 .cardTime{
-    font-size:8px;
+    font-size:10px; /* 少し大きく */
     position:absolute;
     right:6px;
     bottom:4px;
@@ -188,7 +188,7 @@ button{
     gap:6px;
 }
 
-/* ★履歴カードの文字色をモードに合わせて修正 */
+/* ★履歴カードの文字色を生成時モードに完全連動 */
 .card.cyberpunk .label{ color:#FF00FF; }
 .card.cyberpunk .value{ color:#00FFFF; }
 
@@ -304,7 +304,6 @@ function renderList(data){
     let html="";
     data.forEach((item,i)=>{
         const isFav=favoritesData.some(f=>isSame(f,item));
-        // ★生成時モードに基づくクラスを付与して文字色を確実に連動
         html+=`
         <div class="card ${item.mode}">
         <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
