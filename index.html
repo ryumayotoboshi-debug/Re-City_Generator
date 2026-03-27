@@ -14,32 +14,21 @@ body{
     overflow:hidden;
 }
 
-/* 横並び */
-.container{
-    display:flex;
-    height:100vh;
+/* タイトル */
+.title{
+    text-align:center;
+    font-size:16px;
+    padding:6px 0;
+    border-bottom:1px solid #00ffcc;
 }
 
-/* 左（Generate） */
-.left{
-    display:flex;
-    align-items:flex-start;
-    padding:8px;
-}
-
-/* 右 */
-.right{
-    flex:1;
-    position:relative;
-    padding:8px;
-}
-
-/* 出力 */
-#output{
-    font-size:11px;
-    white-space:pre-wrap;
-    line-height:1.4;
-    margin-top:40px;
+/* 上部ボタンエリア */
+.controls{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 40px 40px;
+    gap:6px;
+    padding:6px;
 }
 
 /* ボタン共通 */
@@ -47,72 +36,66 @@ button{
     background:black;
     color:#00ffcc;
     border:1px solid #00ffcc;
-    font-size:11px;
-
-    height:32px; /* 横長に */
-    padding:0 12px;
+    font-size:12px;
 }
 
-/* Generate */
+/* 配置 */
 #generateBtn{
-    width:140px;
+    grid-row:1 / span 2; /* 左側を縦に2マス使用 */
+    grid-column:1;
 }
 
-/* Mode（Generateの右） */
 #modeBtn{
-    position:absolute;
-    top:8px;
-    left:160px; /* Generate + 余白 */
-    width:80px;
+    grid-row:1;
+    grid-column:2;
 }
 
-/* 下ボタン */
-.bottom{
-    position:absolute;
-    bottom:8px;
-    left:8px;
-    right:8px;
-    display:flex;
-    justify-content:space-between;
+#historyBtn{
+    grid-row:2;
+    grid-column:2;
 }
 
+#favBtn{
+    grid-row:2;
+    grid-column:2;
+    justify-self:end;
+    width:45%;
+}
+
+/* 出力 */
+#output{
+    font-size:11px;
+    white-space:pre-wrap;
+    padding:8px;
+    line-height:1.4;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="title">City Generator</div>
 
-    <!-- 左 -->
-    <div class="left">
-        <button id="generateBtn">Generate</button>
-    </div>
-
-    <!-- 右 -->
-    <div class="right">
-
-        <button id="modeBtn">Mode</button>
-
-        <div id="output"></div>
-
-        <div class="bottom">
-            <button id="historyBtn">History</button>
-            <button id="favBtn">⭐</button>
-        </div>
-
-    </div>
-
+<div class="controls">
+    <button id="generateBtn">Generate</button>
+    <button id="modeBtn">Mode</button>
+    <button id="historyBtn">History</button>
+    <button id="favBtn">⭐</button>
 </div>
+
+<div id="output"></div>
 
 <script src="data.js"></script>
 
 <script>
 let currentMode = "cyberpunk";
 
+/* ランダム取得 */
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
 }
 
+/* 生成 */
 function generate(){
     const d = data[currentMode];
 
@@ -130,13 +113,14 @@ function generate(){
     document.getElementById("output").textContent = result;
 }
 
+/* モード切替（仮：2種） */
 function toggleMode(){
     currentMode = (currentMode === "cyberpunk") ? "apocalypse" : "cyberpunk";
 }
 
+/* イベント */
 document.getElementById("generateBtn").onclick = generate;
 document.getElementById("modeBtn").onclick = toggleMode;
-
 document.getElementById("historyBtn").onclick = () => alert("履歴（未実装）");
 document.getElementById("favBtn").onclick = () => alert("お気に入り（未実装）");
 </script>
