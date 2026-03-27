@@ -4,275 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>City Generator</title>
-
-<style>
-
-/* ===== モードカラー ===== */
-:root{
-    --main:#00ffcc;
-    --accent:#ff2bd6;
-    --bg:black;
-    --label-color:#ff2bd6;
-    --value-color:#00ffcc;
-}
-
-body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
-body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; }
-body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; }
-body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
-
-body{
-    margin:0;
-    background:var(--bg);
-    color:var(--main);
-    font-family:monospace;
-    overflow:hidden;
-    text-align:center;
-}
-
-#mainScreen{ padding-top:40px; }
-
-/* ★タイトル拡大＋余白 */
-.title{
-    font-size:38px;
-    font-weight:900;
-    margin-top:24px;
-    margin-bottom:26px;
-    text-shadow:0 0 10px var(--main);
-}
-
-.controls{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 34px 34px;
-    gap:6px;
-    padding:6px 20px;
-}
-
-button, select{
-    background:black;
-    color:var(--main);
-    border:1px solid var(--main);
-    font-size:12px;
-    box-shadow:0 0 5px var(--main);
-}
-
-#generateBtn{
-    grid-row:1 / span 2;
-    font-size:16px;
-}
-
-.bottomRight{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:6px;
-}
-
-/* ===== 出力 ===== */
-#output{ margin-top:6px; }
-
-.label{ color:var(--accent); font-size:12px; }
-.value{ font-size:14px; }
-
-/* ===== 履歴 ===== */
-#historyScreen{
-    padding:10px;
-    height:100vh;
-    overflow-y:auto;
-}
-
-/* ★ボタン大型化 */
-#backBtn, #favHistoryBtn{
-    position:absolute;
-    top:10px;
-    padding:6px 12px;
-    font-size:14px;
-}
-
-#backBtn{ left:10px; }
-#favHistoryBtn{ right:10px; }
-
-.card{
-    position:relative;
-    border:1px solid;
-    margin-bottom:12px;
-    padding:10px;
-    text-align:left;
-}
-
-/* ★星サイズUP */
-.cardFav{
-    position:absolute;
-    top:6px;
-    right:8px;
-    font-size:20px;
-    cursor:pointer;
-}
-
-.cardContent{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
-<body class="cyberpunk">
+<body>
 
-<div id="mainScreen" class="active">
-<div class="title">City Generator</div>
+<!-- 生成画面 -->
+<div id="generateScreen">
 
-<div class="controls">
-<button id="generateBtn">Generate</button>
+    <h1 class="title">City Generator</h1>
 
-<select id="modeSelect">
-<option value="cyberpunk">Cyberpunk</option>
-<option value="apocalypse">Apocalypse</option>
-<option value="synthwave">Synthwave</option>
-<option value="dreamcore">DreamCore</option>
-</select>
+    <div class="buttonZone">
+        <button onclick="generateCity()">Generate</button>
+        <button onclick="openHistory()">History</button>
+    </div>
 
-<div class="bottomRight">
-<button id="historyBtn">History</button>
-<button id="favBtn">☆</button>
-</div>
+    <div id="result"></div>
+
 </div>
 
-<div id="output"></div>
+
+<!-- 履歴画面 -->
+<div id="historyScreen">
+
+    <div class="historyHeader">
+        <button onclick="closeHistory()">戻る</button>
+        <button onclick="toggleFavoriteView()">お気に入り</button>
+    </div>
+
+    <h2 class="historyTitle">History</h2>
+
+    <div id="historyList"></div>
+
 </div>
 
-<div id="historyScreen" class="screen">
-<button id="backBtn">戻る</button>
-<button id="favHistoryBtn">お気に入り</button>
-<h2 id="historyTitle">History</h2>
-<div id="historyList"></div>
-</div>
-
-<script src="data.js"></script>
-
-<script>
-let currentMode="cyberpunk";
-let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
-let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
-let lastGenerated=null;
-let showingFavorites=false;
-
-function save(){
-localStorage.setItem("historyData",JSON.stringify(historyData));
-localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
-}
-
-function isSame(a,b){
-return JSON.stringify(a)===JSON.stringify(b);
-}
-
-function generate(){
-const d=data[currentMode];
-
-const result={
-建築:d.architecture[Math.random()*d.architecture.length|0],
-環境:d.environment[Math.random()*d.environment.length|0],
-社会:d.society[Math.random()*d.society.length|0],
-雰囲気:d.mood[Math.random()*d.mood.length|0],
-地区:d.district[Math.random()*d.district.length|0],
-施設:d.facility[Math.random()*d.facility.length|0],
-職業:d.jobs[Math.random()*d.jobs.length|0],
-事件:d.incidents[Math.random()*d.incidents.length|0],
-主要人物:d.characters[Math.random()*d.characters.length|0],
-mode:currentMode,
-time:new Date().toLocaleString()
-};
-
-lastGenerated=result;
-historyData.unshift(result);
-save();
-
-/* ★状態同期 */
-favBtn.innerText = favoritesData.some(f=>isSame(f,result)) ? "★" : "☆";
-
-let html="";
-for(let k in result){
-if(k==="mode"||k==="time")continue;
-html+=`<div><div class="label">${k}</div><div class="value">${result[k]}</div></div>`;
-}
-output.innerHTML=html;
-}
-
-function toggleFavoriteByIndex(index, list){
-const item=list[index];
-const i=favoritesData.findIndex(f=>isSame(f,item));
-
-if(i>=0){ favoritesData.splice(i,1); }
-else{ favoritesData.unshift(item); }
-
-save();
-renderList(showingFavorites?favoritesData:historyData);
-}
-
-function toggleFavoriteMain(){
-if(!lastGenerated)return;
-toggleFavoriteByIndex(0,[lastGenerated]);
-favBtn.innerText = favoritesData.some(f=>isSame(f,lastGenerated)) ? "★":"☆";
-}
-
-function renderList(data){
-let html="";
-data.forEach((item,i)=>{
-const isFav=favoritesData.some(f=>isSame(f,item));
-
-html+=`
-<div class="card ${item.mode}">
-<div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
-${isFav?"★":"☆"}
-</div>
-
-<div>${item.time}</div>
-
-<div class="cardContent">
-<div>
-<div class="label">建築</div><div>${item.建築}</div>
-<div class="label">環境</div><div>${item.環境}</div>
-<div class="label">社会</div><div>${item.社会}</div>
-</div>
-<div>
-<div class="label">施設</div><div>${item.施設}</div>
-<div class="label">事件</div><div>${item.事件}</div>
-<div class="label">主要人物</div><div>${item.主要人物}</div>
-</div>
-</div>
-</div>`;
-});
-historyList.innerHTML=html;
-}
-
-function showHistory(){
-mainScreen.style.display="none";
-historyScreen.style.display="block";
-showingFavorites=false;
-historyTitle.innerText="History";
-renderList(historyData);
-}
-
-function toggleHistoryMode(){
-showingFavorites=!showingFavorites;
-historyTitle.innerText=showingFavorites?"Favorites":"History";
-renderList(showingFavorites?favoritesData:historyData);
-}
-
-function back(){
-historyScreen.style.display="none";
-mainScreen.style.display="block";
-}
-
-generateBtn.onclick=generate;
-modeSelect.onchange=()=>{currentMode=modeSelect.value;document.body.className=currentMode;};
-historyBtn.onclick=showHistory;
-backBtn.onclick=back;
-favBtn.onclick=toggleFavoriteMain;
-favHistoryBtn.onclick=toggleHistoryMode;
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
