@@ -4,315 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>City Generator</title>
-
-<style>
-
-/* ===== モードカラー ===== */
-:root{
-    --main:#00ffcc;
-    --accent:#ff2bd6;
-    --bg:black;
-    --label-color:#ff2bd6;
-    --value-color:#00ffcc;
-}
-
-body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; --label-color:#ff2bd6; --value-color:#00ffcc; }
-body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; --label-color:#ffaa00; --value-color:#ff7777; }
-body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; --label-color:#66ccff; --value-color:#ff99dd; }
-body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; --label-color:#ff99ff; --value-color:#ccffee; }
-
-/* ===== 基本 ===== */
-body{
-    margin:0;
-    background:var(--bg);
-    color:var(--main);
-    font-family:monospace;
-    overflow:hidden;
-    text-align:center;
-}
-
-/* ★全体を下に移動（ここだけ） */
-#mainScreen{
-    padding-top:40px;
-}
-
-/* タイトル */
-.title{
-    font-size:30px;
-    font-weight:900;
-    margin-top:24px;
-    margin-bottom:16px;
-    text-shadow:0 0 10px var(--main);
-}
-
-.screen{ display:none; }
-.active{ display:block; }
-
-/* ===== コントロール ===== */
-.controls{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 34px 34px;
-    gap:6px;
-    padding:6px;
-}
-
-button, select{
-    background:black;
-    color:var(--main);
-    border:1px solid var(--main);
-    font-size:12px;
-    text-align:center;
-    text-align-last:center;
-    box-shadow:0 0 5px var(--main);
-}
-
-#generateBtn{ grid-row:1 / span 2; }
-#modeSelect{ width:100%; }
-
-.bottomRight{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:6px;
-}
-
-/* 出力 */
-#output{
-    margin-top:6px;
-    font-size:16px;
-    line-height:1.6;
-}
-
-.block{ margin-bottom:6px; }
-
-.block:first-child .label{
-    padding-top:36px;
-}
-
-.label{
-    color:var(--label-color);
-    font-size:12px;
-    text-shadow:0 0 6px var(--label-color);
-    margin-bottom:1px;
-}
-
-.value{
-    color:var(--value-color);
-    font-size:14px;
-}
-
-/* ===== 履歴 ===== */
-#historyScreen{
-    padding:10px;
-    height:100vh;
-    overflow-y:auto;
-}
-
-#backBtn{
-    position:absolute;
-    top:10px;
-    left:10px;
-}
-
-#favHistoryBtn{
-    position:absolute;
-    top:10px;
-    right:10px;
-}
-
-.card{
-    border:1px solid;
-    margin-bottom:12px;
-    padding:10px;
-    font-size:13px;
-    text-align:left;
-}
-
-.card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
-.card.apocalypse{ border-color:#ff4444; color:#ff4444; }
-.card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
-.card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
-
-.card.cyberpunk .label{ color:#ff2bd6; }
-.card.apocalypse .label{ color:#ffaa00; }
-.card.synthwave .label{ color:#66ccff; }
-.card.dreamcore .label{ color:#ff99ff; }
-
-.time{
-    font-size:10px;
-    margin-bottom:6px;
-    color:#888;
-}
-
-.cardContent{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:8px;
-}
-
-.cardContent div{
-    margin-bottom:6px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
-<body class="cyberpunk">
+<body>
+
+<h1 class="title">City Generator</h1>
 
 <div id="mainScreen" class="screen active">
 
-<div class="title">City Generator</div>
-
-<div class="controls">
+  <div class="button-zone">
     <button id="generateBtn">Generate</button>
 
-    <select id="modeSelect">
-        <option value="cyberpunk">Cyberpunk</option>
-        <option value="apocalypse">Apocalypse</option>
-        <option value="synthwave">Synthwave</option>
-        <option value="dreamcore">DreamCore</option>
-    </select>
-
-    <div class="bottomRight">
-        <button id="historyBtn">History</button>
-        <button id="favBtn">☆</button>
+    <div class="right-buttons">
+      <button id="historyBtn">History</button>
+      <button id="favoriteToggle">⭐︎</button>
     </div>
+  </div>
+
+  <div class="mode-buttons">
+    <button onclick="setMode('Cyberpunk')">Cyberpunk</button>
+    <button onclick="setMode('Synthwave')">Synthwave</button>
+    <button onclick="setMode('DreamCore')">DreamCore</button>
+  </div>
+
+  <div id="output"></div>
+
 </div>
 
-<div id="output"></div>
-
-</div>
-
-<!-- 履歴 -->
 <div id="historyScreen" class="screen">
-    <button id="backBtn">戻る</button>
-    <button id="favHistoryBtn">⭐ お気に入り</button>
-    <h2 id="historyTitle">History</h2>
-    <div id="historyList"></div>
+  <div class="history-header">
+    <button onclick="showMain()">← Back</button>
+    <button onclick="showFavorites()">お気に入り</button>
+  </div>
+  <div id="historyList"></div>
 </div>
 
-<script src="data.js"></script>
-
-<script>
-let currentMode = "cyberpunk";
-let historyData = [];
-let favoritesData = [];
-let lastGenerated = null;
-
-function pick(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
-}
-
-function isSame(a,b){
-    return JSON.stringify(a) === JSON.stringify(b);
-}
-
-function generate(){
-    const d = data[currentMode];
-
-    const result = {
-        建築: pick(d.architecture),
-        環境: pick(d.environment),
-        社会: pick(d.society),
-        雰囲気: pick(d.mood),
-        地区: pick(d.district),
-        施設: pick(d.facility),
-        職業: pick(d.jobs),
-        事件: pick(d.incidents),
-        主要人物: pick(d.characters),
-        mode: currentMode,
-        time: new Date().toLocaleString()
-    };
-
-    lastGenerated = result;
-    historyData.unshift(result);
-
-    document.getElementById("favBtn").innerText = "☆";
-
-    let html = "";
-    for(let key in result){
-        if(key === "time" || key === "mode") continue;
-        html += `
-        <div class="block">
-            <div class="label">${key}</div>
-            <div class="value">${result[key]}</div>
-        </div>`;
-    }
-
-    output.innerHTML = html;
-}
-
-function toggleFavorite(){
-    if(!lastGenerated) return;
-
-    const index = favoritesData.findIndex(f=>isSame(f,lastGenerated));
-
-    if(index >= 0){
-        favoritesData.splice(index,1);
-        favBtn.innerText = "☆";
-    }else{
-        favoritesData.unshift(lastGenerated);
-        favBtn.innerText = "★";
-    }
-}
-
-function changeMode(){
-    currentMode = modeSelect.value;
-    document.body.className = currentMode;
-}
-
-function renderList(data){
-    let html = "";
-    data.forEach(item=>{
-        html += `<div class="card ${item.mode}">
-        <div class="time">${item.time}</div>
-
-        <div class="cardContent">
-        <div>
-        <div class="label">建築</div><div>${item.建築}</div>
-        <div class="label">環境</div><div>${item.環境}</div>
-        <div class="label">社会</div><div>${item.社会}</div>
-        <div class="label">雰囲気</div><div>${item.雰囲気}</div>
-        <div class="label">地区</div><div>${item.地区}</div>
-        </div>
-
-        <div>
-        <div class="label">施設</div><div>${item.施設}</div>
-        <div class="label">職業</div><div>${item.職業}</div>
-        <div class="label">事件</div><div>${item.事件}</div>
-        <div class="label">主要人物</div><div>${item.主要人物}</div>
-        </div>
-        </div>
-        </div>`;
-    });
-    historyList.innerHTML = html;
-}
-
-function showHistory(){
-    mainScreen.classList.remove("active");
-    historyScreen.classList.add("active");
-    historyTitle.innerText = "History";
-    renderList(historyData);
-}
-
-function showFavorites(){
-    historyTitle.innerText = "Favorites";
-    renderList(favoritesData);
-}
-
-function back(){
-    historyScreen.classList.remove("active");
-    mainScreen.classList.add("active");
-}
-
-generateBtn.onclick = generate;
-modeSelect.onchange = changeMode;
-historyBtn.onclick = showHistory;
-backBtn.onclick = back;
-favBtn.onclick = toggleFavorite;
-favHistoryBtn.onclick = showFavorites;
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
