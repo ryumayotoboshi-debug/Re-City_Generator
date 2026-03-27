@@ -6,48 +6,203 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=5">
-<link rel="icon" href="IMG_6157.png?v=5" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=5">
+<link rel="manifest" href="manifest.json?v=6">
+<link rel="icon" href="IMG_6157.png?v=6" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=6">
 
 <style>
-:root{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
+/* ===== モードカラー ===== */
+:root{
+    --main:#00ffcc;
+    --accent:#ff2bd6;
+    --bg:black;
+}
+
 body.cyberpunk{ --main:#00FFFF; --accent:#FF00FF; --bg:black; }
 body.apocalypse{ --main:#FAFAD2; --accent:#228B22; --bg:#1a0000; }
 body.synthwave{ --main:#FF00FF; --accent:#1E90FF; --bg:#14001a; }
 body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
 
-body{ margin:0; background:var(--bg); color:var(--main); font-family:monospace; overflow:hidden; text-align:center; }
-#mainScreen{ padding-top:18px; }
-.title{ font-size:38px; font-weight:900; margin-top:12px; margin-bottom:20px; text-shadow:0 0 12px var(--main); }
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--main);
+    font-family:monospace;
+    overflow:hidden;
+    text-align:center;
+}
 
-.controls{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:34px 34px; gap:6px; padding:6px 20px; }
-button{ background:black; color:var(--main); border:1px solid var(--main); font-size:12px; box-shadow:0 0 8px var(--main); }
-#generateBtn{ grid-row:1 / span 2; font-size:16px; }
-.bottomRight{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+#mainScreen{ padding-top:18px; } /* 上に配置 */
 
-.dropdown{ position: relative; display:inline-block; cursor:pointer; }
-.dropdown-toggle{ padding:6px 12px; border:1px solid var(--main); border-radius:4px; background:black; color: var(--main); font-weight:bold; text-align:center; }
-.dropdown-toggle::after{ content:"▼"; float:right; margin-left:6px; }
-.dropdown-menu{ position:absolute; top:100%; left:0; width:100%; background:var(--bg); border:1px solid var(--accent); border-radius:4px; margin-top:2px; display:none; flex-direction: column; z-index:100; }
-.dropdown-menu div{ padding:6px 12px; text-align:center; font-weight:bold; color: var(--main); border-bottom:1px solid var(--accent); }
-.dropdown-menu div:last-child{ border-bottom:none; }
-.dropdown-menu div:hover{ background: var(--accent); color: var(--bg); }
+.title{
+    font-size:38px;
+    font-weight:900;
+    margin-top:12px;
+    margin-bottom:20px;
+    text-shadow:0 0 12px var(--main);
+}
 
-#output{ margin-top:24px; }
-.group{ margin-bottom:10px; }
-.label{ color:var(--accent); font-size:11px; }
-.value{ font-size:12px; color:var(--main); }
+.controls{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 34px 34px;
+    gap:6px;
+    padding:6px 20px;
+}
 
-#historyScreen{ padding:10px; height:100vh; overflow-y:auto; display:none; }
-#backBtn, #favHistoryBtn{ position:absolute; top:10px; padding:6px 12px; font-size:14px; }
-#backBtn{ left:10px; } #favHistoryBtn{ right:10px; }
+button{
+    background:black;
+    color:var(--main);
+    border:1px solid var(--main);
+    font-size:12px;
+    box-shadow:0 0 8px var(--main);
+}
 
-.card{ position:relative; border:1px solid; margin-bottom:12px; padding:8px; text-align:left; box-shadow:0 0 8px var(--main); font-size:12px; }
-.cardFav{ position:absolute; top:6px; right:8px; font-size:22px; cursor:pointer; }
-.cardTime{ font-size:8px; margin-bottom:4px; }
+#generateBtn{
+    grid-row:1 / span 2;
+    font-size:16px;
+}
 
-.cardContent{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.bottomRight{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+}
+
+/* ===== カスタムプルダウン ===== */
+.dropdown{
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-toggle{
+    padding:6px 12px;
+    border:1px solid var(--main);
+    border-radius:4px;
+    background: black;
+    color: var(--main);
+    font-weight:bold;
+    text-align:center;
+}
+
+.dropdown-toggle::after{
+    content:"▼";
+    float:right;
+    margin-left:6px;
+}
+
+.dropdown-menu{
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--accent);
+    border-radius:4px;
+    margin-top:2px;
+    display:none;
+    flex-direction: column;
+    z-index:100;
+}
+
+.dropdown-menu div{
+    padding:6px 12px;
+    text-align:center;
+    font-weight:bold;
+    color: var(--main);
+    border-bottom:1px solid var(--accent);
+}
+
+.dropdown-menu div:last-child{
+    border-bottom:none;
+}
+
+.dropdown-menu div:hover{
+    background: var(--accent);
+    color: var(--bg);
+}
+
+/* ===== 出力 ===== */
+#output{ 
+    margin-top:24px;
+}
+
+#output .group{ margin-bottom:10px; }
+
+#output .label{
+    color:var(--accent);
+    font-size:14px; /* 生成画面は大きく */
+}
+
+#output .value{
+    font-size:20px; /* 生成画面は大きく */
+    color:var(--main);
+}
+
+/* ===== 履歴 ===== */
+#historyScreen{
+    padding:10px;
+    height:100vh;
+    overflow-y:auto;
+    display:none;
+}
+
+#backBtn, #favHistoryBtn{
+    position:absolute;
+    top:10px;
+    padding:6px 12px;
+    font-size:14px;
+}
+
+#backBtn{ left:10px; }
+#favHistoryBtn{ right:10px; }
+
+.card{
+    position:relative;
+    border:1px solid;
+    margin-bottom:12px;
+    padding:8px;
+    text-align:left;
+    box-shadow:0 0 8px var(--main);
+    font-size:10px; /* 小さく */
+}
+
+.cardFav{
+    position:absolute;
+    top:6px;
+    right:8px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.cardTime{
+    font-size:8px; 
+    position:absolute; 
+    bottom:4px; 
+    right:8px;
+}
+
+/* 都市カード内容を左右2カラム */
+.cardContent{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+}
+
+/* ★履歴カードの文字色は生成時モードに連動 */
+.card.cyberpunk .label{ color:#FF00FF; }
+.card.cyberpunk .value{ color:#00FFFF; }
+
+.card.apocalypse .label{ color:#FF4500; }
+.card.apocalypse .value{ color:#FFD700; }
+
+.card.synthwave .label{ color:#00FFFF; }
+.card.synthwave .value{ color:#FF00FF; }
+
+.card.dreamcore .label{ color:#FF99FF; }
+.card.dreamcore .value{ color:#99FFCC; }
+
 </style>
 </head>
 
@@ -86,19 +241,13 @@ button{ background:black; color:var(--main); border:1px solid var(--main); font-
 </div>
 
 <script src="data.js"></script>
+
 <script>
 let currentMode="cyberpunk";
 let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
 let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated=null;
 let showingFavorites=false;
-
-const modeColors={
-  cyberpunk:{label:'#FF00FF', value:'#00FFFF'},
-  apocalypse:{label:'#FF4500', value:'#FFD700'},
-  synthwave:{label:'#00FFFF', value:'#FF00FF'},
-  dreamcore:{label:'#FF99FF', value:'#99FFCC'}
-};
 
 function save(){
     localStorage.setItem("historyData",JSON.stringify(historyData));
@@ -129,8 +278,12 @@ function generate(){
 
     let html="";
     for(let k in result){
-        if(k==="mode"||k==="time") continue;
-        html+=`<div class="group"><div class="label">${k}</div><div class="value">${result[k]}</div></div>`;
+        if(k==="mode"||k==="time")continue;
+        html+=`
+        <div class="group">
+        <div class="label">${k}</div>
+        <div class="value">${result[k]}</div>
+        </div>`;
     }
     output.innerHTML=html;
 }
@@ -145,7 +298,7 @@ function toggleFavoriteByIndex(index, list){
 }
 
 function toggleFavoriteMain(){
-    if(!lastGenerated) return;
+    if(!lastGenerated)return;
     toggleFavoriteByIndex(0,[lastGenerated]);
     favBtn.innerText = favoritesData.some(f=>isSame(f,lastGenerated)) ? "★":"☆";
 }
@@ -153,28 +306,28 @@ function toggleFavoriteMain(){
 function renderList(data){
     let html="";
     data.forEach((item,i)=>{
-        const colors = modeColors[item.mode]||{label:'#fff',value:'#fff'};
+        const isFav=favoritesData.some(f=>isSame(f,item));
         html+=`
-        <div class="card" style="border-color:${colors.value};">
-            <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
-                ${favoritesData.some(f=>isSame(f,item))?"★":"☆"}
-            </div>
-            <div class="cardTime" style="color:${colors.value};">${item.time}</div>
-            <div class="cardContent">
-                <div>
-                    <div class="label" style="color:${colors.label};">建築</div><div class="value" style="color:${colors.value};">${item.建築}</div>
-                    <div class="label" style="color:${colors.label};">環境</div><div class="value" style="color:${colors.value};">${item.環境}</div>
-                    <div class="label" style="color:${colors.label};">社会</div><div class="value" style="color:${colors.value};">${item.社会}</div>
-                    <div class="label" style="color:${colors.label};">雰囲気</div><div class="value" style="color:${colors.value};">${item.雰囲気}</div>
-                    <div class="label" style="color:${colors.label};">地区</div><div class="value" style="color:${colors.value};">${item.地区}</div>
-                </div>
-                <div>
-                    <div class="label" style="color:${colors.label};">施設</div><div class="value" style="color:${colors.value};">${item.施設}</div>
-                    <div class="label" style="color:${colors.label};">職業</div><div class="value" style="color:${colors.value};">${item.職業}</div>
-                    <div class="label" style="color:${colors.label};">事件</div><div class="value" style="color:${colors.value};">${item.事件}</div>
-                    <div class="label" style="color:${colors.label};">主要人物</div><div class="value" style="color:${colors.value};">${item.主要人物}</div>
-                </div>
-            </div>
+        <div class="card ${item.mode}">
+        <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
+        ${isFav?"★":"☆"}
+        </div>
+        <div class="cardContent">
+        <div>
+        <div class="label">建築</div><div class="value">${item.建築}</div>
+        <div class="label">環境</div><div class="value">${item.環境}</div>
+        <div class="label">社会</div><div class="value">${item.社会}</div>
+        <div class="label">雰囲気</div><div class="value">${item.雰囲気}</div>
+        <div class="label">地区</div><div class="value">${item.地区}</div>
+        </div>
+        <div>
+        <div class="label">施設</div><div class="value">${item.施設}</div>
+        <div class="label">職業</div><div class="value">${item.職業}</div>
+        <div class="label">事件</div><div class="value">${item.事件}</div>
+        <div class="label">主要人物</div><div class="value">${item.主要人物}</div>
+        </div>
+        </div>
+        <div class="cardTime">${item.time}</div>
         </div>`;
     });
     historyList.innerHTML=html;
@@ -194,9 +347,12 @@ function toggleHistoryMode(){
     renderList(showingFavorites?favoritesData:historyData);
 }
 
-function back(){ historyScreen.style.display="none"; mainScreen.style.display="block"; }
+function back(){
+    historyScreen.style.display="none";
+    mainScreen.style.display="block";
+}
 
-/* ドロップダウン */
+/* カスタムドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
@@ -215,6 +371,7 @@ historyBtn.onclick=showHistory;
 backBtn.onclick=back;
 favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
+
 </script>
 
 </body>
