@@ -32,7 +32,6 @@ body{
 
 #mainScreen{ padding-top:40px; }
 
-/* ★タイトル */
 .title{
     font-size:38px;
     font-weight:900;
@@ -49,14 +48,18 @@ body{
     padding:6px 20px;
 }
 
-/* ★中央寄せ */
+/* ★中央寄せ（修正） */
 button, select{
     background:black;
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
     box-shadow:0 0 5px var(--main);
-    text-align:center; /* ★追加 */
+}
+
+select{
+    text-align:center;
+    text-align-last:center; /* ★これが効く */
 }
 
 #generateBtn{
@@ -71,12 +74,11 @@ button, select{
 }
 
 /* ===== 出力 ===== */
-/* ★余白拡張（建築との距離） */
 #output{ margin-top:24px; }
 
-/* ★グループ化 */
+/* ★余白を少し小さく */
 .group{
-    margin-bottom:16px; /* ★グループ間余白 */
+    margin-bottom:10px;
 }
 
 .label{
@@ -84,9 +86,9 @@ button, select{
     font-size:12px;
 }
 
-/* ★文字サイズUP */
+/* ★少し小さく */
 .value{
-    font-size:16px;
+    font-size:15px;
 }
 
 /* ===== 履歴 ===== */
@@ -115,11 +117,12 @@ button, select{
     text-align:left;
 }
 
+/* ★さらに拡大 */
 .cardFav{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:20px;
+    font-size:26px;
     cursor:pointer;
 }
 
@@ -208,7 +211,6 @@ let html="";
 for(let k in result){
 if(k==="mode"||k==="time")continue;
 
-/* ★グループ化（最小変更） */
 html+=`
 <div class="group">
 <div class="label">${k}</div>
