@@ -33,7 +33,7 @@ body{
 .title{
     font-size:30px;
     margin-top:24px;
-    margin-bottom:8px;
+    margin-bottom:16px; /* ★拡張 */
     text-shadow:0 0 10px var(--main);
 }
 
@@ -41,7 +41,7 @@ body{
 .screen{ display:none; }
 .active{ display:block; }
 
-/* ===== 親グリッド ===== */
+/* ===== コントロール ===== */
 .controls{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -50,7 +50,6 @@ body{
     padding:6px;
 }
 
-/* 共通 */
 button, select{
     background:black;
     color:var(--main);
@@ -61,17 +60,15 @@ button, select{
     box-shadow:0 0 5px var(--main);
 }
 
-/* Generate */
 #generateBtn{
     grid-row:1 / span 2;
 }
 
-/* Mode */
 #modeSelect{
     width:100%;
 }
 
-/* ===== 右下エリア（←追加ポイント） ===== */
+/* 右下 */
 .bottomRight{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -87,6 +84,11 @@ button, select{
 
 .block{ margin-bottom:6px; }
 
+/* ★建築の上余白を拡張 */
+.block:first-child .label{
+    margin-top:8px;
+}
+
 .label{
     color:var(--accent);
     font-size:12px;
@@ -98,7 +100,7 @@ button, select{
     font-size:14px;
 }
 
-/* 履歴 */
+/* ===== 履歴 ===== */
 #historyScreen{ padding:10px; }
 
 #backBtn{
@@ -107,18 +109,32 @@ button, select{
     left:10px;
 }
 
+/* カード */
 .card{
-    border:1px solid var(--main);
+    border:1px solid;
     margin-bottom:8px;
     padding:6px;
     font-size:12px;
     text-align:left;
 }
 
+/* ★モード別カード色（固定用） */
+.card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
+.card.apocalypse{ border-color:#ff4444; color:#ff4444; }
+.card.future{ border-color:#66aaff; color:#66aaff; }
+.card.fantasy{ border-color:#66ff99; color:#66ff99; }
+
 .time{
     font-size:10px;
     margin-bottom:4px;
     color:#888;
+}
+
+/* ★2カラム構成 */
+.cardContent{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
 }
 
 </style>
@@ -140,7 +156,6 @@ button, select{
         <option value="fantasy">Fantasy</option>
     </select>
 
-    <!-- ★ここがポイント -->
     <div class="bottomRight">
         <button id="historyBtn">History</button>
         <button id="favBtn">⭐</button>
@@ -181,6 +196,7 @@ function generate(){
         職業: pick(d.jobs),
         事件: pick(d.incidents),
         主要人物: pick(d.characters),
+        mode: currentMode, /* ★保存 */
         time: new Date().toLocaleString()
     };
 
@@ -188,7 +204,7 @@ function generate(){
 
     let html = "";
     for(let key in result){
-        if(key === "time") continue;
+        if(key === "time" || key === "mode") continue;
         html += `
         <div class="block">
             <div class="label">${key}</div>
@@ -212,15 +228,28 @@ function showHistory(){
     let html = "";
 
     historyData.forEach(item=>{
-        html += `<div class="card">
-        <div class="time">${item.time}</div>`;
+        html += `<div class="card ${item.mode}">
+        <div class="time">${item.time}</div>
 
-        for(let key in item){
-            if(key === "time") continue;
-            html += `<div>${key}: ${item[key]}</div>`;
-        }
+        <div class="cardContent">
 
-        html += `</div>`;
+        <div>
+        <div>建築: ${item.建築}</div>
+        <div>環境: ${item.環境}</div>
+        <div>社会: ${item.社会}</div>
+        <div>雰囲気: ${item.雰囲気}</div>
+        <div>地区: ${item.地区}</div>
+        </div>
+
+        <div>
+        <div>施設: ${item.施設}</div>
+        <div>職業: ${item.職業}</div>
+        <div>事件: ${item.事件}</div>
+        <div>主要人物: ${item.主要人物}</div>
+        </div>
+
+        </div>
+        </div>`;
     });
 
     document.getElementById("historyList").innerHTML = html;
