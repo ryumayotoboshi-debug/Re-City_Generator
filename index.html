@@ -11,41 +11,35 @@ body{
     background:black;
     color:#00ffcc;
     font-family:monospace;
-    overflow:hidden; /* スクロールバー削除 */
+    overflow:hidden;
 }
 
-/* 全体レイアウト */
+/* 横並び */
 .container{
     display:flex;
     height:100vh;
 }
 
-/* 左：Generateボタン */
+/* 左（Generate） */
 .left{
-    width:35%;
     display:flex;
-    justify-content:center;
-    align-items:center;
+    align-items:flex-start;
+    padding:8px;
 }
 
-#generateBtn{
-    width:90%;
-    height:90%;
-    font-size:14px;
-}
-
-/* 右：UI */
+/* 右 */
 .right{
-    width:65%;
+    flex:1;
     position:relative;
     padding:8px;
 }
 
 /* 出力 */
 #output{
-    font-size:11px; /* 小さく */
+    font-size:11px;
     white-space:pre-wrap;
     line-height:1.4;
+    margin-top:40px;
 }
 
 /* ボタン共通 */
@@ -53,25 +47,33 @@ button{
     background:black;
     color:#00ffcc;
     border:1px solid #00ffcc;
-    padding:6px;
     font-size:11px;
+
+    height:32px; /* 横長に */
+    padding:0 12px;
 }
 
-/* モード切替（右上） */
+/* Generate */
+#generateBtn{
+    width:140px;
+}
+
+/* Mode（Generateの右） */
 #modeBtn{
     position:absolute;
-    top:5px;
-    right:5px;
+    top:8px;
+    left:160px; /* Generate + 余白 */
+    width:80px;
 }
 
-/* 下部ボタン */
+/* 下ボタン */
 .bottom{
     position:absolute;
-    bottom:5px;
-    width:100%;
+    bottom:8px;
+    left:8px;
+    right:8px;
     display:flex;
     justify-content:space-between;
-    padding:0 5px;
 }
 
 </style>
@@ -102,18 +104,15 @@ button{
 
 </div>
 
-<!-- data.js 読み込み -->
 <script src="data.js"></script>
 
 <script>
 let currentMode = "cyberpunk";
 
-/* ランダム取得 */
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
 }
 
-/* 生成処理 */
 function generate(){
     const d = data[currentMode];
 
@@ -131,19 +130,15 @@ function generate(){
     document.getElementById("output").textContent = result;
 }
 
-/* モード切替 */
 function toggleMode(){
     currentMode = (currentMode === "cyberpunk") ? "apocalypse" : "cyberpunk";
 }
 
-/* イベント */
 document.getElementById("generateBtn").onclick = generate;
 document.getElementById("modeBtn").onclick = toggleMode;
 
-/* 仮（後で機能追加可能） */
 document.getElementById("historyBtn").onclick = () => alert("履歴（未実装）");
 document.getElementById("favBtn").onclick = () => alert("お気に入り（未実装）");
-
 </script>
 
 </body>
