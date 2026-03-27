@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=12">
-<link rel="icon" href="IMG_6157.png?v=12" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=12">
+<link rel="manifest" href="manifest.json?v=13">
+<link rel="icon" href="IMG_6157.png?v=13" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=13">
 
 <style>
 :root{
@@ -131,11 +131,11 @@ button{
 
 #output .label{
     color:var(--accent);
-    font-size:13px; /* -1px */
+    font-size:13px;
 }
 
 #output .value{
-    font-size:15px; /* -1px */
+    font-size:15px;
     color:var(--main);
 }
 
@@ -145,13 +145,15 @@ button{
     height:100vh;
     overflow-y:auto;
     display:none;
+    position:relative;
 }
 
 #backBtn, #favHistoryBtn{
-    position:absolute;
+    position:absolute; /* 固定表示 */
     top:10px;
     padding:6px 12px;
     font-size:14px;
+    z-index:200;
 }
 
 #backBtn{ left:10px; }
@@ -171,7 +173,7 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:34px; /* +4px */
+    font-size:34px;
     cursor:pointer;
 }
 
@@ -193,8 +195,8 @@ button{
 }
 
 /* 履歴カード文字色をモードごとに分離 & フォントサイズ調整 */
-.card.cyberpunk .label{ color:#FF00FF; font-size:14px; } /* -2px */
-.card.cyberpunk .value{ color:#00FFFF; font-size:14px; } /* -1px */
+.card.cyberpunk .label{ color:#FF00FF; font-size:14px; }
+.card.cyberpunk .value{ color:#00FFFF; font-size:14px; }
 
 .card.apocalypse .label{ color:#228B22; font-size:14px; }
 .card.apocalypse .value{ color:#FAFAD2; font-size:14px; }
