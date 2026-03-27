@@ -18,10 +18,10 @@
     --bg:black;
 }
 
-body.cyberpunk{ --main:#00FFFF; --accent:#FF00FF; --bg:black; }
-body.apocalypse{ --main:#FAFAD2; --accent:#228B22; --bg:#1a0000; }
-body.synthwave{ --main:#FF00FF; --accent:#8A2BE2; --bg:#14001a; }
-body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
+body.cyberpunk{ --main:#00FFFF; --accent:#FF00FF; --bg:#000000; }
+body.apocalypse{ --main:#FFD700; --accent:#FF4500; --bg:#1a0000; }
+body.synthwave{ --main:#FF00FF; --accent:#00FFFF; --bg:#14001a; }
+body.dreamcore{ --main:#99FFCC; --accent:#FF99FF; --bg:#001a1a; }
 
 body{
     margin:0;
@@ -39,7 +39,7 @@ body{
     font-weight:900;
     margin-top:24px;
     margin-bottom:26px;
-    text-shadow:0 0 10px var(--main);
+    text-shadow:0 0 12px var(--main);
 }
 
 .controls{
@@ -55,7 +55,7 @@ button{
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
-    box-shadow:0 0 5px var(--main);
+    box-shadow:0 0 8px var(--main);
 }
 
 #generateBtn{
@@ -69,7 +69,7 @@ button{
     gap:6px;
 }
 
-/* ===== カスタムプルダウン（ボタン風装飾は無し） ===== */
+/* ===== カスタムプルダウン ===== */
 .dropdown{
     position: relative;
     display: inline-block;
@@ -162,6 +162,7 @@ button{
     margin-bottom:12px;
     padding:10px;
     text-align:left;
+    box-shadow:0 0 8px var(--main);
 }
 
 .cardFav{
@@ -178,18 +179,18 @@ button{
     gap:8px;
 }
 
-/* ★モード同期 */
-.card.cyberpunk .label{ color:#ff2bd6; }
-.card.cyberpunk div{ color:#00ffcc; }
+/* ★モード同期（生成画面と同じネオンカラー） */
+.card.cyberpunk .label{ color:#FF00FF; }
+.card.cyberpunk div{ color:#00FFFF; }
 
-.card.apocalypse .label{ color:#ffaa00; }
-.card.apocalypse div{ color:#ff4444; }
+.card.apocalypse .label{ color:#FF4500; }
+.card.apocalypse div{ color:#FFD700; }
 
-.card.synthwave .label{ color:#66ccff; }
-.card.synthwave div{ color:#ff66cc; }
+.card.synthwave .label{ color:#00FFFF; }
+.card.synthwave div{ color:#FF00FF; }
 
-.card.dreamcore .label{ color:#ff99ff; }
-.card.dreamcore div{ color:#99ffcc; }
+.card.dreamcore .label{ color:#FF99FF; }
+.card.dreamcore div{ color:#99FFCC; }
 
 </style>
 </head>
