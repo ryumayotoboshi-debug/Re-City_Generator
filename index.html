@@ -12,14 +12,14 @@ body{
     color:#00ffcc;
     font-family:monospace;
     overflow:hidden;
-    text-align:center; /* 全体中央 */
+    text-align:center;
 }
 
 /* タイトル */
 .title{
-    font-size:26px; /* 大きく */
-    margin-top:20px; /* 上余白増加 */
-    margin-bottom:10px;
+    font-size:26px;
+    margin-top:20px;
+    margin-bottom:8px; /* 少し詰める */
     text-shadow:0 0 10px #00ffcc;
 }
 
@@ -32,7 +32,7 @@ body{
     padding:6px;
 }
 
-/* ボタン共通 */
+/* ボタン */
 button{
     background:black;
     color:#00ffcc;
@@ -67,29 +67,30 @@ button{
     justify-self:end;
 }
 
-/* 出力エリア */
+/* 出力 */
 #output{
-    margin-top:10px;
-    font-size:16px; /* 大きく */
-    line-height:1.8;
+    margin-top:6px; /* 少し詰める */
+    font-size:16px;
+    line-height:1.6; /* 行間も微調整 */
 }
 
-/* 各項目 */
+/* 各ブロック */
 .block{
-    margin-bottom:12px;
+    margin-bottom:6px; /* ← 要素間を詰める */
 }
 
 /* 見出し */
 .label{
-    color:#ff2bd6; /* ピンクネオン */
+    color:#ff2bd6;
     font-size:12px;
     text-shadow:0 0 6px #ff2bd6;
+    margin-bottom:1px; /* ← 見出しと内容の間を詰める */
 }
 
 /* 内容 */
 .value{
     font-size:18px;
-    margin-top:2px;
+    margin-top:0; /* 念のため余白除去 */
 }
 </style>
 </head>
@@ -112,12 +113,10 @@ button{
 <script>
 let currentMode = "cyberpunk";
 
-/* ランダム */
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
 }
 
-/* 生成 */
 function generate(){
     const d = data[currentMode];
 
@@ -171,12 +170,10 @@ function generate(){
     document.getElementById("output").innerHTML = resultHTML;
 }
 
-/* モード切替（仮） */
 function toggleMode(){
     currentMode = (currentMode === "cyberpunk") ? "apocalypse" : "cyberpunk";
 }
 
-/* イベント */
 document.getElementById("generateBtn").onclick = generate;
 document.getElementById("modeBtn").onclick = toggleMode;
 document.getElementById("historyBtn").onclick = () => alert("履歴（未実装）");
