@@ -4,42 +4,148 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>City Generator</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #111;
+    color: #fff;
+}
+
+/* タイトル */
+h1 {
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+/* 生成画面全体を少し下に */
+#main {
+    margin-top: 40px;
+}
+
+/* ボタンゾーン（←ここだけ変更） */
+.button-zone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 20px; /* ←追加：左右に余白 */
+}
+
+/* ボタン共通 */
+button {
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* モードボタン中央寄せ */
+.mode-btn {
+    text-align: center;
+}
+
+/* 見出し */
+.section-title {
+    margin-top: 40px;
+    margin-bottom: 8px;
+    padding-top: 20px;
+}
+
+/* 内容 */
+.section-content {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* 履歴画面 */
+#history {
+    display: none;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* 都市カード */
+.city-card {
+    padding: 20px;
+    margin: 20px;
+}
+
+/* カード内レイアウト */
+.card-columns {
+    display: flex;
+    gap: 20px;
+}
+
+.card-column {
+    flex: 1;
+}
+
+/* カード内見出し */
+.card-title {
+    margin-bottom: 4px;
+}
+
+/* カード内テキスト */
+.card-content {
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+</style>
 </head>
 
 <body>
 
-<h1 class="title">City Generator</h1>
+<h1>City Generator</h1>
 
-<div id="mainScreen" class="screen active">
+<div id="main">
 
-  <div class="button-zone">
-    <button id="generateBtn">Generate</button>
+    <!-- ボタンゾーン -->
+    <div class="button-zone">
+        <button id="generate">Generate</button>
 
-    <div class="right-buttons">
-      <button id="historyBtn">History</button>
-      <button id="favoriteToggle">⭐︎</button>
+        <div>
+            <button id="mode" class="mode-btn">Cyberpunk</button>
+            <button id="favorite">⭐︎</button>
+            <button id="historyBtn">History</button>
+        </div>
     </div>
-  </div>
 
-  <div class="mode-buttons">
-    <button onclick="setMode('Cyberpunk')">Cyberpunk</button>
-    <button onclick="setMode('Synthwave')">Synthwave</button>
-    <button onclick="setMode('DreamCore')">DreamCore</button>
-  </div>
+    <!-- 出力 -->
+    <div id="output">
 
-  <div id="output"></div>
+        <div class="section-title">建築</div>
+        <div class="section-content" id="architecture"></div>
+
+        <div class="section-title">環境</div>
+        <div class="section-content" id="environment"></div>
+
+        <div class="section-title">地区</div>
+        <div class="section-content" id="district"></div>
+
+        <div class="section-title">施設</div>
+        <div class="section-content" id="facility"></div>
+
+        <div class="section-title">主要人物</div>
+        <div class="section-content" id="character"></div>
+
+    </div>
+</div>
+
+<!-- 履歴画面 -->
+<div id="history">
+
+    <button id="back">Back</button>
+    <button id="favView">お気に入り</button>
+
+    <div id="historyList"></div>
 
 </div>
 
-<div id="historyScreen" class="screen">
-  <div class="history-header">
-    <button onclick="showMain()">← Back</button>
-    <button onclick="showFavorites()">お気に入り</button>
-  </div>
-  <div id="historyList"></div>
-</div>
+<script src="data.js"></script>
+<script src="main.js"></script>
 
-<script src="script.js"></script>
 </body>
 </html>
