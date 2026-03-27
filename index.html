@@ -32,13 +32,13 @@ body{
     text-align:center;
 }
 
-#mainScreen{ padding-top:40px; }
+#mainScreen{ padding-top:20px; } /* 上に配置 */
 
 .title{
     font-size:38px;
     font-weight:900;
-    margin-top:24px;
-    margin-bottom:26px;
+    margin-top:12px;
+    margin-bottom:20px;
     text-shadow:0 0 12px var(--main);
 }
 
@@ -163,29 +163,30 @@ button{
     padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
-    font-size:11px; /* 全体フォントサイズを小さく */
+    font-size:12px; /* 小さく */
 }
 
 .cardFav{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:24px;
+    font-size:22px;
     cursor:pointer;
 }
 
+.cardTime{
+    font-size:10px; /* 時刻表示小さく */
+    margin-bottom:4px;
+}
+
+/* 都市カード内容を左右2カラム */
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:6px;
 }
 
-.cardTime{
-    font-size:10px; /* 時刻フォントを小さく */
-    margin-bottom:4px;
-}
-
-/* ★履歴カード文字色を生成時モードに連動 */
+/* ★履歴カードの文字色をモードに合わせて修正 */
 .card.cyberpunk .label{ color:#FF00FF; }
 .card.cyberpunk .value{ color:#00FFFF; }
 
