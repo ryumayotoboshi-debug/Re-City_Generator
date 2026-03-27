@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Re：City Generator</title>
 
-<!-- ホーム画面アイコン指定 -->
-<link rel="icon" type="image/png" sizes="192x192" href="icon.png">
-<link rel="apple-touch-icon" href="icon.png">
-
 <style>
 :root{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
 
@@ -48,15 +44,15 @@ button{ background:black; color:var(--main); border:1px solid var(--main); font-
 #favHistoryBtn{ right:10px; }
 
 .card{ position:relative; border:1px solid; margin-bottom:16px; padding:8px; text-align:left; box-shadow:0 0 8px var(--main); }
-.cardFav{ position:absolute; top:-6px; right:8px; font-size:40px; cursor:pointer; }
+.cardFav{ position:absolute; top:-6px; right:8px; font-size:40px; cursor:pointer; } /* ⭐︎をさらに上に */
 .cardTime{ font-size:14px; position:absolute; right:6px; bottom:4px; }
 
 .cardContent{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.cardContent > div:first-child{ padding-left:8px; }
+.cardContent > div:first-child{ padding-left:8px; } /* 左カラムに余白 */
 .cardContent > div > .group{ margin-bottom:12px; }
 
 /* モードごとの文字色とフォントサイズ */
-.card.cyberpunk .label{ color:#FF00FF; font-size:15px; }
+.card.cyberpunk .label{ color:#FF00FF; font-size:15px; } /* 見出し1px小さく */
 .card.cyberpunk .value{ color:#00FFFF; font-size:15px; }
 .card.apocalypse .label{ color:#228B22; font-size:15px; }
 .card.apocalypse .value{ color:#FAFAD2; font-size:15px; }
