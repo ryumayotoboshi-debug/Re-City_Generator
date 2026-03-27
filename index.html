@@ -16,8 +16,8 @@
 
 body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
 body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; }
-body.future{ --main:#66aaff; --accent:#ffffff; --bg:#001122; }
-body.fantasy{ --main:#66ff99; --accent:#cc66ff; --bg:#001a00; }
+body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; }
+body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
 
 /* ===== 基本 ===== */
 body{
@@ -33,7 +33,7 @@ body{
 .title{
     font-size:30px;
     margin-top:24px;
-    margin-bottom:16px; /* ★拡張 */
+    margin-bottom:16px;
     text-shadow:0 0 10px var(--main);
 }
 
@@ -84,9 +84,9 @@ button, select{
 
 .block{ margin-bottom:6px; }
 
-/* ★建築の上余白を拡張 */
+/* ★建築のpadding上を拡張 */
 .block:first-child .label{
-    margin-top:8px;
+    padding-top:10px;
 }
 
 .label{
@@ -118,11 +118,11 @@ button, select{
     text-align:left;
 }
 
-/* ★モード別カード色（固定用） */
+/* モード別カード色 */
 .card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
 .card.apocalypse{ border-color:#ff4444; color:#ff4444; }
-.card.future{ border-color:#66aaff; color:#66aaff; }
-.card.fantasy{ border-color:#66ff99; color:#66ff99; }
+.card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
+.card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
 
 .time{
     font-size:10px;
@@ -130,11 +130,17 @@ button, select{
     color:#888;
 }
 
-/* ★2カラム構成 */
+/* 2カラム */
 .cardContent{
     display:grid;
     grid-template-columns: 1fr 1fr;
     gap:6px;
+}
+
+/* ★履歴内の見出し色を統一 */
+.cardContent .label{
+    color:var(--accent);
+    text-shadow:0 0 6px var(--accent);
 }
 
 </style>
@@ -152,8 +158,8 @@ button, select{
     <select id="modeSelect">
         <option value="cyberpunk">Cyberpunk</option>
         <option value="apocalypse">Apocalypse</option>
-        <option value="future">Future</option>
-        <option value="fantasy">Fantasy</option>
+        <option value="synthwave">Synthwave</option>
+        <option value="dreamcore">DreamCore</option>
     </select>
 
     <div class="bottomRight">
@@ -196,7 +202,7 @@ function generate(){
         職業: pick(d.jobs),
         事件: pick(d.incidents),
         主要人物: pick(d.characters),
-        mode: currentMode, /* ★保存 */
+        mode: currentMode,
         time: new Date().toLocaleString()
     };
 
@@ -234,18 +240,18 @@ function showHistory(){
         <div class="cardContent">
 
         <div>
-        <div>建築: ${item.建築}</div>
-        <div>環境: ${item.環境}</div>
-        <div>社会: ${item.社会}</div>
-        <div>雰囲気: ${item.雰囲気}</div>
-        <div>地区: ${item.地区}</div>
+        <div class="label">建築</div><div>${item.建築}</div>
+        <div class="label">環境</div><div>${item.環境}</div>
+        <div class="label">社会</div><div>${item.社会}</div>
+        <div class="label">雰囲気</div><div>${item.雰囲気}</div>
+        <div class="label">地区</div><div>${item.地区}</div>
         </div>
 
         <div>
-        <div>施設: ${item.施設}</div>
-        <div>職業: ${item.職業}</div>
-        <div>事件: ${item.事件}</div>
-        <div>主要人物: ${item.主要人物}</div>
+        <div class="label">施設</div><div>${item.施設}</div>
+        <div class="label">職業</div><div>${item.職業}</div>
+        <div class="label">事件</div><div>${item.事件}</div>
+        <div class="label">主要人物</div><div>${item.主要人物}</div>
         </div>
 
         </div>
