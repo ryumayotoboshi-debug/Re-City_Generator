@@ -54,7 +54,6 @@ button, select{
     box-shadow:0 0 5px var(--main);
 }
 
-/* ★中央寄せ */
 select{
     text-align:center;
     text-align-last:center;
@@ -81,7 +80,10 @@ select{
     font-size:12px;
 }
 
-.value{ font-size:15px; }
+.value{
+    font-size:15px;
+    color:var(--main);
+}
 
 /* ===== 履歴 ===== */
 #historyScreen{
@@ -123,11 +125,18 @@ select{
     gap:8px;
 }
 
-/* ★ここが今回の本質：モード別ラベル色 */
+/* ★今回の核心：見出し＋内容 両方モード同期 */
 .card.cyberpunk .label{ color:#ff2bd6; }
+.card.cyberpunk div{ color:#00ffcc; }
+
 .card.apocalypse .label{ color:#ffaa00; }
+.card.apocalypse div{ color:#ff4444; }
+
 .card.synthwave .label{ color:#66ccff; }
+.card.synthwave div{ color:#ff66cc; }
+
 .card.dreamcore .label{ color:#ff99ff; }
+.card.dreamcore div{ color:#99ffcc; }
 
 </style>
 </head>
