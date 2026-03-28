@@ -64,7 +64,33 @@ button{ background:black; color:var(--main); border:1px solid var(--main); font-
 .card.synthwave .value{ color:#FF00FF; font-size:15px; }
 .card.dreamcore .label{ color:#ff99ff; font-size:15px; }
 .card.dreamcore .value{ color:#99ffcc; font-size:15px; }
+
 </style>
+
+<style>
+/* ▼生成画面の微調整（既存を壊さない上書き） */
+
+/* 全体を少し上に */
+#mainView {
+  transform: translateY(-6px);
+}
+
+/* 見出し */
+.result-title {
+  font-size: calc(1em - 1px);
+}
+
+/* 要素 */
+.result-text {
+  font-size: calc(1em - 1px);
+}
+
+/* 項目間の余白 */
+.result-item {
+  margin-bottom: 6px; /* 元より少しだけ狭く */
+}
+</style>
+
 </head>
 <body class="cyberpunk">
 
