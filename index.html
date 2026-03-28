@@ -3,195 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Re：City Generator</title>
 
-<!-- ホーム画面アイコン指定 -->
+<link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="IMG_6157.png">
 <link rel="apple-touch-icon" href="IMG_6157.png">
 
 <style>
-:root{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
 
-body.cyberpunk{ --main:#00FFFF; --accent:#FF00FF; --bg:black; }
-body.apocalypse{ --main:#FAFAD2; --accent:#228B22; --bg:#1a0000; }
-body.synthwave{ --main:#FF00FF; --accent:#1E90FF; --bg:#14001a; }
-body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#000;
+  color:#0ff;
+  text-align:center;
+}
 
-body{ margin:0; background:var(--bg); color:var(--main); font-family:monospace; overflow:hidden; text-align:center; }
-#mainScreen{ padding-top:18px; }
+/* タイトル */
+h1{
+  margin:20px 0 10px 0;
+}
 
-.title{ font-size:31px; font-weight:900; margin-top:12px; margin-bottom:20px; text-shadow:0 0 12px var(--main); }
+/* ▼ ここで全体を少し上に寄せる */
+#main{
+  margin-top:-10px; /* ←追加（軽く上に） */
+}
 
-.controls{ display:grid; grid-template-columns:1fr 1fr; grid-template-rows:34px 34px; gap:6px; padding:6px 20px; }
-button{ background:black; color:var(--main); border:1px solid var(--main); font-size:12px; box-shadow:0 0 8px var(--main); }
-#generateBtn{ grid-row:1 / span 2; font-size:16px; }
+/* ▼ 項目間の余白を少し縮小 */
+.result-block{
+  margin:8px 0; /* 変更前: 12px程度想定 */
+}
 
-.bottomRight{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-.dropdown{ position:relative; display:inline-block; cursor:pointer; }
-.dropdown-toggle{ padding:6px 12px; border:1px solid var(--main); border-radius:4px; background:black; color: var(--main); font-weight:bold; text-align:center; }
-.dropdown-toggle::after{ content:"▼"; float:right; margin-left:6px; }
-.dropdown-menu{ position:absolute; top:100%; left:0; width:100%; background:var(--bg); border:1px solid var(--accent); border-radius:4px; margin-top:2px; display:none; flex-direction: column; z-index:100; }
-.dropdown-menu div{ padding:6px 12px; text-align:center; font-weight:bold; color: var(--main); border-bottom:1px solid var(--accent); }
-.dropdown-menu div:last-child{ border-bottom:none; }
-.dropdown-menu div:hover{ background: var(--accent); color: var(--bg); }
+/* ▼ 見出し */
+.result-title{
+  font-size:13px; /* -1px調整 */
+  opacity:0.7;
+}
 
-#output{ margin-top:24px; }
-#output .group{ margin-bottom:14px; }
-#output .label{ color:var(--accent); font-size:12px; }
-#output .value{ font-size:16px; color:var(--main); }
+/* ▼ 要素 */
+.result-value{
+  font-size:17px; /* -1px調整 */
+}
 
-#historyScreen{ padding:10px; height:100vh; overflow-y:auto; display:none; position:relative; }
-#historyTopTap{ position:fixed; top:0; left:0; width:100%; height:20px; z-index:1000; }
+/* ボタン */
+button{
+  margin:10px;
+  padding:10px 20px;
+}
 
-#backBtn, #favHistoryBtn{ position:absolute; top:10px; padding:6px 12px; font-size:14px; z-index:200; }
-#backBtn{ left:10px; }
-#favHistoryBtn{ right:10px; }
-
-.card{ position:relative; border:1px solid; margin-bottom:16px; padding:8px; text-align:left; box-shadow:0 0 8px var(--main); }
-.cardFav{ position:absolute; top:-6px; right:8px; font-size:40px; cursor:pointer; }
-.cardTime{ font-size:10px; position:absolute; right:6px; bottom:4px; }
-
-.cardContent{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.cardContent > div:first-child{ padding-left:8px; }
-.cardContent > div > .group{ margin-bottom:12px; }
-
-/* モードごとの文字色とフォントサイズ */
-.card.cyberpunk .label{ color:#FF00FF; font-size:15px; }
-.card.cyberpunk .value{ color:#00FFFF; font-size:15px; }
-.card.apocalypse .label{ color:#228B22; font-size:15px; }
-.card.apocalypse .value{ color:#FAFAD2; font-size:15px; }
-.card.synthwave .label{ color:#1E90FF; font-size:15px; }
-.card.synthwave .value{ color:#FF00FF; font-size:15px; }
-.card.dreamcore .label{ color:#ff99ff; font-size:15px; }
-.card.dreamcore .value{ color:#99ffcc; font-size:15px; }
 </style>
 </head>
-<body class="cyberpunk">
 
-<div id="mainScreen">
-<div class="title">Re：City Generator</div>
+<body>
 
-<div class="controls">
-<button id="generateBtn">Generate</button>
-<div class="dropdown">
-<div class="dropdown-toggle" id="modeToggle">Cyberpunk</div>
-<div class="dropdown-menu" id="modeMenu">
-<div data-mode="cyberpunk">Cyberpunk</div>
-<div data-mode="apocalypse">Apocalypse</div>
-<div data-mode="synthwave">Synthwave</div>
-<div data-mode="dreamcore">DreamCore</div>
-</div>
-</div>
-<div class="bottomRight">
-<button id="historyBtn">History</button>
-<button id="favBtn">☆</button>
-</div>
-</div>
+<h1>Re：City Generator</h1>
 
-<div id="output"></div>
-</div>
+<div id="main">
 
-<div id="historyScreen">
-<div id="historyTopTap"></div>
-<button id="backBtn">戻る</button>
-<button id="favHistoryBtn">お気に入り</button>
-<h2 id="historyTitle">History</h2>
-<div id="historyList"></div>
+<button onclick="generate()">生成</button>
+
+<div id="result"></div>
+
 </div>
 
 <script src="data.js"></script>
-<script>
-let currentMode="cyberpunk";
-let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
-let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
-let lastGenerated=null;
-let showingFavorites=false;
 
-function save(){ localStorage.setItem("historyData",JSON.stringify(historyData)); localStorage.setItem("favoritesData",JSON.stringify(favoritesData)); }
-function isSame(a,b){ return JSON.stringify(a)===JSON.stringify(b); }
+<script>
+
+let currentMode = "cyberpunk";
 
 function generate(){
-    const d=data[currentMode];
-    const result={ 建築:d.architecture[Math.random()*d.architecture.length|0], 環境:d.environment[Math.random()*d.environment.length|0],
-    社会:d.society[Math.random()*d.society.length|0], 雰囲気:d.mood[Math.random()*d.mood.length|0],
-    地区:d.district[Math.random()*d.district.length|0], 施設:d.facility[Math.random()*d.facility.length|0],
-    職業:d.jobs[Math.random()*d.jobs.length|0], 事件:d.incidents[Math.random()*d.incidents.length|0],
-    主要人物:d.characters[Math.random()*d.characters.length|0], mode:currentMode.toLowerCase(),
-    time:new Date().toLocaleString() };
-    lastGenerated=result;
-    historyData.unshift(result);
-    save();
-    favBtn.innerText = favoritesData.some(f=>isSame(f,result)) ? "★" : "☆";
 
-    let html="";
-    for(let k in result){
-        if(k==="mode"||k==="time")continue;
-        html+=`<div class="group"><div class="label">${k}</div><div class="value">${result[k]}</div></div>`;
-    }
-    output.innerHTML=html;
+  const modeData = data[currentMode];
+
+  let html = "";
+
+  for(let key in modeData){
+
+    const arr = modeData[key];
+    const value = arr[Math.floor(Math.random()*arr.length)];
+
+    html += `
+    <div class="result-block">
+      <div class="result-title">${key}</div>
+      <div class="result-value">${value}</div>
+    </div>
+    `;
+  }
+
+  document.getElementById("result").innerHTML = html;
 }
 
-function toggleFavoriteByIndex(index,list){
-    const item=list[index];
-    const i=favoritesData.findIndex(f=>isSame(f,item));
-    if(i>=0){ favoritesData.splice(i,1); }
-    else{ favoritesData.unshift(item); }
-    save();
-    renderList(showingFavorites?favoritesData:historyData);
-}
-
-function toggleFavoriteMain(){ if(!lastGenerated)return; toggleFavoriteByIndex(0,[lastGenerated]); favBtn.innerText=favoritesData.some(f=>isSame(f,lastGenerated))?"★":"☆"; }
-
-function renderList(data){
-    let html="";
-    data.forEach((item,i)=>{
-        const isFav=favoritesData.some(f=>isSame(f,item));
-        html+=`<div class="card ${item.mode}">
-        <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">${isFav?"★":"☆"}</div>
-        <div class="cardContent">
-        <div>
-        <div class="group"><div class="label">建築</div><div class="value">${item.建築}</div></div>
-        <div class="group"><div class="label">環境</div><div class="value">${item.環境}</div></div>
-        <div class="group"><div class="label">社会</div><div class="value">${item.社会}</div></div>
-        <div class="group"><div class="label">雰囲気</div><div class="value">${item.雰囲気}</div></div>
-        <div class="group"><div class="label">地区</div><div class="value">${item.地区}</div></div>
-        </div>
-        <div>
-        <div class="group"><div class="label">施設</div><div class="value">${item.施設}</div></div>
-        <div class="group"><div class="label">職業</div><div class="value">${item.職業}</div></div>
-        <div class="group"><div class="label">事件</div><div class="value">${item.事件}</div></div>
-        <div class="group"><div class="label">主要人物</div><div class="value">${item.主要人物}</div></div>
-        </div>
-        </div>
-        <div class="cardTime">${item.time}</div>
-        </div>`;
-    });
-    historyList.innerHTML=html;
-}
-
-function showHistory(){ mainScreen.style.display="none"; historyScreen.style.display="block"; showingFavorites=false; historyTitle.innerText="History"; renderList(historyData); }
-function toggleHistoryMode(){ showingFavorites=!showingFavorites; historyTitle.innerText=showingFavorites?"Favorites":"History"; renderList(showingFavorites?favoritesData:historyData); }
-function back(){ historyScreen.style.display="none"; mainScreen.style.display="block"; }
-
-const toggle=document.getElementById("modeToggle");
-const menu=document.getElementById("modeMenu");
-toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
-menu.querySelectorAll("div").forEach(el=>{ el.onclick=()=>{ currentMode=el.dataset.mode.toLowerCase(); document.body.className=currentMode; toggle.innerText=el.innerText; menu.style.display="none"; }});
-
-generateBtn.onclick=generate; historyBtn.onclick=showHistory; backBtn.onclick=back;
-favBtn.onclick=toggleFavoriteMain; favHistoryBtn.onclick=toggleHistoryMode;
-
-document.getElementById("historyTopTap").addEventListener("click",()=>{ historyScreen.scrollTop=0; });
 </script>
 
+<!-- Service Worker -->
 <script>
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Service Worker registered:', reg.scope))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js');
+  });
 }
 </script>
+
 </body>
 </html>
